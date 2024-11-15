@@ -1,4 +1,4 @@
-//Form1.cs
+﻿//Form1.cs
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +17,8 @@ namespace FolderToPDF
         // Control declarations
         private TextBox txtDirectory;
         private TextBox txtFileTypes;
+        private TextBox txtExcludeFolders;
+        private TextBox txtExcludeFiles;
         private TextBox txtOutputPath;
         private Button btnBrowse;
         private Button btnGenerate;
@@ -33,7 +35,21 @@ namespace FolderToPDF
             InitializeComponent();
             SetupForm();
             LoadSettings();
+
         }
+
+        private void LogToFile(string message)
+        {
+            try
+            {
+                File.AppendAllText("debug_log.txt", $"{DateTime.Now}: {message}{Environment.NewLine}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error writing to log file: {ex.Message}", "Logging Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -57,11 +73,39 @@ namespace FolderToPDF
             txtDirectory = new TextBox();
             txtFileTypes = new TextBox();
             txtOutputPath = new TextBox();
+            txtExcludeFolders = new TextBox();
+            txtExcludeFiles = new TextBox(); 
+
             btnBrowse = new Button();
             btnGenerate = new Button();
             lblDirectory = new Label();
             lblFileTypes = new Label();
             lblOutputPath = new Label();
+
+            // Labels and TextBoxes for folders to exclude
+            Label lblExcludeFolders = new Label();
+            lblExcludeFolders.Text = "Exclude Folders:";
+            lblExcludeFolders.Location = new Point(10, 105);
+            lblExcludeFolders.AutoSize = true;
+
+            txtExcludeFolders.Location = new Point(120, 102);
+            txtExcludeFolders.Size = new Size(350, 20);
+
+            // Labels and TextBoxes for files to exclude
+            Label lblExcludeFiles = new Label();
+            lblExcludeFiles.Text = "Exclude Files:";
+            lblExcludeFiles.Location = new Point(10, 135); // Позиция ниже "Exclude Folders"
+            lblExcludeFiles.AutoSize = true;
+
+            txtExcludeFiles = new TextBox();
+            txtExcludeFiles.Location = new Point(120, 132);
+            txtExcludeFiles.Size = new Size(350, 20);
+
+            // Add new controls to form
+            Controls.Add(lblExcludeFolders);
+            Controls.Add(txtExcludeFolders);
+            Controls.Add(lblExcludeFiles);
+            Controls.Add(txtExcludeFiles);
 
             // Form settings
             SuspendLayout();
@@ -108,17 +152,17 @@ namespace FolderToPDF
 
             // Generate Button
             btnGenerate.Text = "Generate PDF";
-            btnGenerate.Location = new Point(120, 110);
+            btnGenerate.Location = new Point(120, 180); 
             btnGenerate.Size = new Size(350, 30);
             btnGenerate.Click += new EventHandler(BtnGenerate_Click);
 
             // Add controls to form
             Controls.AddRange(new Control[] {
-                lblDirectory, txtDirectory, btnBrowse,
-                lblFileTypes, txtFileTypes,
-                lblOutputPath, txtOutputPath,
-                btnGenerate
-            });
+        lblDirectory, txtDirectory, btnBrowse,
+        lblFileTypes, txtFileTypes,
+        lblOutputPath, txtOutputPath,
+        btnGenerate
+    });
 
             ResumeLayout(false);
             PerformLayout();
@@ -212,16 +256,20 @@ namespace FolderToPDF
                     return;
                 }
 
-                if (!txtOutputPath.Text.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
-                {
-                    MessageBox.Show("Output file must be a PDF.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                var excludeFolders = txtExcludeFolders.Text
+                    .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
+
+                var excludeFiles = txtExcludeFiles.Text
+                    .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
+
+
 
                 fileTypes = types.ToList();
                 SaveSettings();
 
-                var contents = GetDirectoryContents(directoryPath, fileTypes);
+                var contents = GetDirectoryContents(directoryPath, fileTypes, excludeFolders, excludeFiles);
                 if (!contents.Any())
                 {
                     MessageBox.Show("No matching files found in the directory.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -237,15 +285,42 @@ namespace FolderToPDF
             }
         }
 
-        private List<(string FilePath, string FileName, string Content)> GetDirectoryContents(string dirPath, List<string> types)
+
+
+
+        private List<(string FilePath, string FileName, string Content)> GetDirectoryContents(
+            string dirPath,
+            List<string> types,
+            List<string> excludeFolders = null,
+            List<string> excludeFiles = null)
         {
+            LogToFile($"Starting GetDirectoryContents for path: {dirPath}");
+
             var contents = new List<(string, string, string)>();
             try
             {
-                var files = Directory.GetFiles(dirPath, "*.*", SearchOption.AllDirectories)
-                    .Where(f => types.Any(t => f.EndsWith($".{t}", StringComparison.OrdinalIgnoreCase)));
+                // Получение всех файлов в корневой директории
+                var rootFiles = Directory.GetFiles(dirPath, "*.*", SearchOption.TopDirectoryOnly)
+                    .Where(f => types.Any(t => f.EndsWith($".{t}", StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
 
-                foreach (var file in files)
+                LogToFile($"Root Files Before Exclusion: {string.Join(", ", rootFiles)}");
+
+                // Исключаем файлы по маске
+                if (excludeFiles != null && excludeFiles.Any())
+                {
+                    rootFiles = rootFiles.Where(f => !excludeFiles.Any(mask =>
+                    {
+                        string fileName = Path.GetFileName(f);
+                        return mask.Contains("*")
+                            ? fileName.StartsWith(mask.TrimEnd('*'))
+                            : fileName.Equals(mask, StringComparison.OrdinalIgnoreCase);
+                    })).ToList();
+                }
+
+                LogToFile($"Root Files After Exclusion: {string.Join(", ", rootFiles)}");
+
+                foreach (var file in rootFiles)
                 {
                     try
                     {
@@ -254,16 +329,64 @@ namespace FolderToPDF
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Error reading file {file}: {ex.Message}", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        LogToFile($"Error reading file {file}: {ex.Message}");
+                    }
+                }
+
+                // Обрабатываем поддиректории
+                var allDirectories = Directory.GetDirectories(dirPath, "*", SearchOption.AllDirectories);
+
+                LogToFile($"All Directories Before Exclusion: {string.Join(", ", allDirectories)}");
+
+                var filteredDirectories = allDirectories.Where(d =>
+                    excludeFolders == null || !excludeFolders.Any(ex => d.Contains(ex, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
+
+                LogToFile($"Filtered Directories: {string.Join(", ", filteredDirectories)}");
+
+                foreach (var directory in filteredDirectories)
+                {
+                    var files = Directory.GetFiles(directory, "*.*", SearchOption.TopDirectoryOnly)
+                        .Where(f => types.Any(t => f.EndsWith($".{t}", StringComparison.OrdinalIgnoreCase)))
+                        .ToList();
+
+                    LogToFile($"Files in Directory '{directory}' Before Exclusion: {string.Join(", ", files)}");
+
+                    // Исключаем файлы по маске
+                    files = files.Where(f => !excludeFiles.Any(mask =>
+                    {
+                        string fileName = Path.GetFileName(f);
+                        return mask.Contains("*")
+                            ? fileName.StartsWith(mask.TrimEnd('*'))
+                            : fileName.Equals(mask, StringComparison.OrdinalIgnoreCase);
+                    })).ToList();
+
+                    LogToFile($"Files in Directory '{directory}' After Exclusion: {string.Join(", ", files)}");
+
+                    foreach (var file in files)
+                    {
+                        try
+                        {
+                            var content = File.ReadAllText(file, Encoding.UTF8);
+                            contents.Add((file, Path.GetFileName(file), content));
+                        }
+                        catch (Exception ex)
+                        {
+                            LogToFile($"Error reading file {file}: {ex.Message}");
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error accessing directory: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogToFile($"Error accessing directory: {ex.Message}");
             }
+
+
             return contents;
         }
+
+
 
         private void CreatePDFWithContents(List<(string FilePath, string FileName, string Content)> contents, string outputPath)
         {
@@ -335,7 +458,11 @@ namespace FolderToPDF
     {
         public string DirectoryPath { get; set; }
         public List<string> FileTypes { get; set; }
+        public List<string> ExcludeFolders { get; set; }
+        public List<string> ExcludeFiles { get; set; }
     }
+
+
 
     static class Program
     {

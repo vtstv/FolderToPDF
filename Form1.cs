@@ -184,12 +184,13 @@ namespace FolderToPDF
                     var settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(SETTINGS_FILE));
                     if (settings != null)
                     {
+                        txtDirectory.Text = settings.DirectoryPath;
+                        txtFileTypes.Text = settings.FileTypes != null ? string.Join(", ", settings.FileTypes) : string.Empty;
+                        txtExcludeFolders.Text = settings.ExcludeFolders != null ? string.Join(", ", settings.ExcludeFolders) : string.Empty;
+                        txtExcludeFiles.Text = settings.ExcludeFiles != null ? string.Join(", ", settings.ExcludeFiles) : string.Empty;
+
                         directoryPath = settings.DirectoryPath;
                         fileTypes = settings.FileTypes ?? new List<string> { "py", "css", "html" };
-
-                        txtDirectory.Text = directoryPath;
-                        txtFileTypes.Text = string.Join(", ", fileTypes);
-                        SetDefaultOutputFilename();
                     }
                 }
             }
@@ -199,23 +200,27 @@ namespace FolderToPDF
             }
         }
 
+
         private void SaveSettings()
         {
             try
             {
                 var settings = new Settings
                 {
-                    DirectoryPath = directoryPath,
-                    FileTypes = fileTypes
+                    DirectoryPath = txtDirectory.Text,
+                    FileTypes = txtFileTypes.Text.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                    ExcludeFolders = txtExcludeFolders.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                    ExcludeFiles = txtExcludeFiles.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList()
                 };
 
-                File.WriteAllText(SETTINGS_FILE, JsonConvert.SerializeObject(settings));
+                File.WriteAllText(SETTINGS_FILE, JsonConvert.SerializeObject(settings, Formatting.Indented));
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error saving settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
 
         private void BtnBrowse_Click(object sender, EventArgs e)
         {
@@ -461,7 +466,6 @@ namespace FolderToPDF
         public List<string> ExcludeFolders { get; set; }
         public List<string> ExcludeFiles { get; set; }
     }
-
 
 
     static class Program

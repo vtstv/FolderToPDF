@@ -1,3 +1,4 @@
+//Form1.cs
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,7 @@ using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.draw;
 using Newtonsoft.Json;
 
-namespace DirectoryToPDFConverter
+namespace FolderToPDF
 {
     public partial class MainForm : Form
     {
@@ -53,81 +54,81 @@ namespace DirectoryToPDFConverter
         private void InitializeComponent()
         {
             // Initialize controls
-            this.txtDirectory = new TextBox();
-            this.txtFileTypes = new TextBox();
-            this.txtOutputPath = new TextBox();
-            this.btnBrowse = new Button();
-            this.btnGenerate = new Button();
-            this.lblDirectory = new Label();
-            this.lblFileTypes = new Label();
-            this.lblOutputPath = new Label();
+            txtDirectory = new TextBox();
+            txtFileTypes = new TextBox();
+            txtOutputPath = new TextBox();
+            btnBrowse = new Button();
+            btnGenerate = new Button();
+            lblDirectory = new Label();
+            lblFileTypes = new Label();
+            lblOutputPath = new Label();
 
             // Form settings
-            this.SuspendLayout();
-            this.Text = "Directory to PDF Converter";
-            this.Size = new System.Drawing.Size(600, 250);
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.StartPosition = FormStartPosition.CenterScreen;
+            SuspendLayout();
+            Text = "Directory to PDF Converter";
+            Size = new Size(600, 250);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            StartPosition = FormStartPosition.CenterScreen;
 
             // Directory Label
-            this.lblDirectory.Text = "Select Directory:";
-            this.lblDirectory.Location = new System.Drawing.Point(10, 15);
-            this.lblDirectory.AutoSize = true;
+            lblDirectory.Text = "Select Directory:";
+            lblDirectory.Location = new Point(10, 15);
+            lblDirectory.AutoSize = true;
 
             // Directory TextBox
-            this.txtDirectory.Location = new System.Drawing.Point(120, 12);
-            this.txtDirectory.Size = new System.Drawing.Size(350, 20);
-            this.txtDirectory.AllowDrop = true;
-            this.txtDirectory.DragDrop += new DragEventHandler(TxtDirectory_DragDrop);
-            this.txtDirectory.DragEnter += new DragEventHandler(TxtDirectory_DragEnter);
+            txtDirectory.Location = new Point(120, 12);
+            txtDirectory.Size = new Size(350, 20);
+            txtDirectory.AllowDrop = true;
+            txtDirectory.DragDrop += new DragEventHandler(TxtDirectory_DragDrop);
+            txtDirectory.DragEnter += new DragEventHandler(TxtDirectory_DragEnter);
 
             // Browse Button
-            this.btnBrowse.Text = "Browse";
-            this.btnBrowse.Location = new System.Drawing.Point(480, 10);
-            this.btnBrowse.Click += new EventHandler(BtnBrowse_Click);
+            btnBrowse.Text = "Browse";
+            btnBrowse.Location = new Point(480, 10);
+            btnBrowse.Click += new EventHandler(BtnBrowse_Click);
 
             // File Types Label
-            this.lblFileTypes.Text = "File Types:";
-            this.lblFileTypes.Location = new System.Drawing.Point(10, 45);
-            this.lblFileTypes.AutoSize = true;
+            lblFileTypes.Text = "File Types:";
+            lblFileTypes.Location = new Point(10, 45);
+            lblFileTypes.AutoSize = true;
 
             // File Types TextBox
-            this.txtFileTypes.Location = new System.Drawing.Point(120, 42);
-            this.txtFileTypes.Size = new System.Drawing.Size(350, 20);
+            txtFileTypes.Location = new Point(120, 42);
+            txtFileTypes.Size = new Size(350, 20);
 
             // Output Path Label
-            this.lblOutputPath.Text = "Output PDF Path:";
-            this.lblOutputPath.Location = new System.Drawing.Point(10, 75);
-            this.lblOutputPath.AutoSize = true;
+            lblOutputPath.Text = "Output PDF Path:";
+            lblOutputPath.Location = new Point(10, 75);
+            lblOutputPath.AutoSize = true;
 
             // Output Path TextBox
-            this.txtOutputPath.Location = new System.Drawing.Point(120, 72);
-            this.txtOutputPath.Size = new System.Drawing.Size(350, 20);
+            txtOutputPath.Location = new Point(120, 72);
+            txtOutputPath.Size = new Size(350, 20);
 
             // Generate Button
-            this.btnGenerate.Text = "Generate PDF";
-            this.btnGenerate.Location = new System.Drawing.Point(120, 110);
-            this.btnGenerate.Size = new System.Drawing.Size(350, 30);
-            this.btnGenerate.Click += new EventHandler(BtnGenerate_Click);
+            btnGenerate.Text = "Generate PDF";
+            btnGenerate.Location = new Point(120, 110);
+            btnGenerate.Size = new Size(350, 30);
+            btnGenerate.Click += new EventHandler(BtnGenerate_Click);
 
             // Add controls to form
-            this.Controls.AddRange(new Control[] {
-                this.lblDirectory, this.txtDirectory, this.btnBrowse,
-                this.lblFileTypes, this.txtFileTypes,
-                this.lblOutputPath, this.txtOutputPath,
-                this.btnGenerate
+            Controls.AddRange(new Control[] {
+                lblDirectory, txtDirectory, btnBrowse,
+                lblFileTypes, txtFileTypes,
+                lblOutputPath, txtOutputPath,
+                btnGenerate
             });
 
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         private void SetupForm()
         {
-            this.AllowDrop = true;
-            this.DragEnter += new DragEventHandler(MainForm_DragEnter);
-            this.DragDrop += new DragEventHandler(MainForm_DragDrop);
+            AllowDrop = true;
+            DragEnter += new DragEventHandler(MainForm_DragEnter);
+            DragDrop += new DragEventHandler(MainForm_DragDrop);
         }
 
         private void LoadSettings()

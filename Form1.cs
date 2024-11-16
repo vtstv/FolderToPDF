@@ -31,7 +31,7 @@ namespace FolderToPDF
 
         private const string SETTINGS_FILE = "settings.json";
         private string directoryPath = string.Empty;
-        private List<string> fileTypes = new List<string> { "py", "css", "html" };
+        private List<string> fileTypes = new List<string> { "js", "py", "cs" };
 
         public MainForm()
         {
@@ -96,6 +96,9 @@ namespace FolderToPDF
             btnGenerateTxt = new Button();
             chkRemoveComments = new CheckBox();
             chkReplaceSensitiveInfo = new CheckBox();
+            panel1 = new Panel();
+            label1 = new Label();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // txtDirectory
@@ -177,9 +180,9 @@ namespace FolderToPDF
             lblOutputPath.AutoSize = true;
             lblOutputPath.Location = new Point(10, 75);
             lblOutputPath.Name = "lblOutputPath";
-            lblOutputPath.Size = new Size(120, 20);
+            lblOutputPath.Size = new Size(88, 20);
             lblOutputPath.TabIndex = 9;
-            lblOutputPath.Text = "Output PDF Path:";
+            lblOutputPath.Text = "Output PDF:";
             // 
             // lblExcludeFolders
             // 
@@ -213,9 +216,9 @@ namespace FolderToPDF
             lblOutputPathTxt.AutoSize = true;
             lblOutputPathTxt.Location = new Point(10, 104);
             lblOutputPathTxt.Name = "lblOutputPathTxt";
-            lblOutputPathTxt.Size = new Size(119, 20);
+            lblOutputPathTxt.Size = new Size(87, 20);
             lblOutputPathTxt.TabIndex = 0;
-            lblOutputPathTxt.Text = "Output TXT Path:";
+            lblOutputPathTxt.Text = "Output TXT:";
             lblOutputPathTxt.Click += lblOutputPathTxt_Click;
             // 
             // txtOutputPathTxt
@@ -236,25 +239,44 @@ namespace FolderToPDF
             // 
             // chkRemoveComments
             // 
-            chkRemoveComments.Location = new Point(120, 240);
+            chkRemoveComments.Location = new Point(0, 20);
             chkRemoveComments.Name = "chkRemoveComments";
-            chkRemoveComments.Size = new Size(200, 20);
+            chkRemoveComments.Size = new Size(100, 20);
             chkRemoveComments.TabIndex = 0;
-            chkRemoveComments.Text = "Remove Comments";
+            chkRemoveComments.Text = "Comments";
             // 
             // chkReplaceSensitiveInfo
             // 
-            chkReplaceSensitiveInfo.Location = new Point(320, 240);
+            chkReplaceSensitiveInfo.Location = new Point(0, 43);
             chkReplaceSensitiveInfo.Name = "chkReplaceSensitiveInfo";
-            chkReplaceSensitiveInfo.Size = new Size(200, 20);
+            chkReplaceSensitiveInfo.Size = new Size(100, 20);
             chkReplaceSensitiveInfo.TabIndex = 1;
-            chkReplaceSensitiveInfo.Text = "Replace Sensitive";
+            chkReplaceSensitiveInfo.Text = "Sensitive";
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(chkReplaceSensitiveInfo);
+            panel1.Controls.Add(chkRemoveComments);
+            panel1.Location = new Point(480, 63);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(94, 125);
+            panel1.TabIndex = 13;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new System.Drawing.Font("Segoe UI", 10F);
+            label1.Location = new Point(17, -4);
+            label1.Name = "label1";
+            label1.Size = new Size(72, 23);
+            label1.TabIndex = 14;
+            label1.Text = "Striping:";
             // 
             // MainForm
             // 
-            ClientSize = new Size(582, 270);
-            Controls.Add(chkRemoveComments);
-            Controls.Add(chkReplaceSensitiveInfo);
+            ClientSize = new Size(584, 238);
+            Controls.Add(panel1);
             Controls.Add(lblExcludeFolders);
             Controls.Add(txtExcludeFolders);
             Controls.Add(lblExcludeFiles);
@@ -276,6 +298,8 @@ namespace FolderToPDF
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Directory to PDF Converter";
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -297,20 +321,27 @@ namespace FolderToPDF
                     if (settings != null)
                     {
                         txtDirectory.Text = settings.DirectoryPath;
-                        txtFileTypes.Text = settings.FileTypes != null ? string.Join(", ", settings.FileTypes) : string.Empty;
+                        txtFileTypes.Text = settings.FileTypes != null ? string.Join(", ", settings.FileTypes) : string.Join(", ", fileTypes);
                         txtExcludeFolders.Text = settings.ExcludeFolders != null ? string.Join(", ", settings.ExcludeFolders) : string.Empty;
                         txtExcludeFiles.Text = settings.ExcludeFiles != null ? string.Join(", ", settings.ExcludeFiles) : string.Empty;
                         txtOutputPathTxt.Text = settings.OutputPathTxt;
-                        txtOutputPath.Text = settings.OutputPathPdf;  // Add this line
+                        txtOutputPath.Text = settings.OutputPathPdf;
                         directoryPath = settings.DirectoryPath;
-                        fileTypes = settings.FileTypes ?? new List<string> { "py", "css", "html" };
+                        fileTypes = settings.FileTypes ?? fileTypes;
                         chkRemoveComments.Checked = settings.RemoveComments;
                         chkReplaceSensitiveInfo.Checked = settings.ReplaceSensitiveInfo;
                     }
                 }
+                else
+                {
+                    // If no settings file exists, set default values
+                    txtFileTypes.Text = string.Join(", ", fileTypes);
+                }
             }
             catch (Exception ex)
             {
+                // If there's an error loading settings, set default values
+                txtFileTypes.Text = string.Join(", ", fileTypes);
                 MessageBox.Show($"Error loading settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
@@ -552,11 +583,17 @@ namespace FolderToPDF
                         {
                             LogToFile($"Error reading file {file}: {ex.Message}");
                         }
+                        {
+                            // If no settings file exists, set default values
+                            txtFileTypes.Text = string.Join(", ", fileTypes);
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
+                txtFileTypes.Text = string.Join(", ", fileTypes);
+                MessageBox.Show($"Error loading settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 LogToFile($"Error accessing directory: {ex.Message}");
             }
 
@@ -602,14 +639,12 @@ namespace FolderToPDF
                 foreach (var (filePath, fileName, content) in contents)
                 {
                     writer.WriteLine($"File Path: {filePath}");
-                    writer.WriteLine(new string('-', 80)); // Separator line
                     writer.WriteLine();
 
                     // Limit content length to prevent memory issues
                     var truncatedContent = content.Length > 100000 ? content.Substring(0, 100000) + "\n[Content truncated...]" : content;
                     writer.WriteLine(truncatedContent);
                     writer.WriteLine();
-                    writer.WriteLine(new string('=', 80)); // File separator
                     writer.WriteLine();
                 }
             }
@@ -658,6 +693,9 @@ namespace FolderToPDF
         {
 
         }
+
+        private Panel panel1;
+        private Label label1;
     }
 
     public class Settings

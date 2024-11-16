@@ -276,6 +276,7 @@ namespace FolderToPDF
                         txtExcludeFolders.Text = settings.ExcludeFolders != null ? string.Join(", ", settings.ExcludeFolders) : string.Empty;
                         txtExcludeFiles.Text = settings.ExcludeFiles != null ? string.Join(", ", settings.ExcludeFiles) : string.Empty;
                         txtOutputPathTxt.Text = settings.OutputPathTxt;
+                        txtOutputPath.Text = settings.OutputPathPdf;  // Add this line
                         directoryPath = settings.DirectoryPath;
                         fileTypes = settings.FileTypes ?? new List<string> { "py", "css", "html" };
                     }
@@ -298,7 +299,8 @@ namespace FolderToPDF
                     FileTypes = txtFileTypes.Text.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                     ExcludeFolders = txtExcludeFolders.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                     ExcludeFiles = txtExcludeFiles.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
-                    OutputPathTxt = txtOutputPathTxt.Text
+                    OutputPathTxt = txtOutputPathTxt.Text,
+                    OutputPathPdf = txtOutputPath.Text  // Add this line
                 };
                 File.WriteAllText(SETTINGS_FILE, JsonConvert.SerializeObject(settings, Formatting.Indented));
             }
@@ -631,7 +633,9 @@ namespace FolderToPDF
         public List<string> ExcludeFolders { get; set; }
         public List<string> ExcludeFiles { get; set; }
         public string OutputPathTxt { get; set; }
+        public string OutputPathPdf { get; set; }  
     }
+
 
 
     static class Program

@@ -10,6 +10,10 @@ namespace FolderToPDF
     public partial class MainForm : Form
     {
         private Button aboutButton;
+        private Button btnGenerateTxt;
+        private TextBox txtOutputPathTxt;
+        private Label lblOutputPathTxt;
+
         // Control declarations
         private TextBox txtDirectory;
         private TextBox txtFileTypes;
@@ -54,11 +58,15 @@ namespace FolderToPDF
                 if (txtDirectory != null) txtDirectory.Dispose();
                 if (txtFileTypes != null) txtFileTypes.Dispose();
                 if (txtOutputPath != null) txtOutputPath.Dispose();
+                if (txtOutputPathTxt != null) txtOutputPathTxt.Dispose();
                 if (btnBrowse != null) btnBrowse.Dispose();
                 if (btnGenerate != null) btnGenerate.Dispose();
+                if (btnGenerateTxt != null) btnGenerateTxt.Dispose();
                 if (lblDirectory != null) lblDirectory.Dispose();
                 if (lblFileTypes != null) lblFileTypes.Dispose();
                 if (lblOutputPath != null) lblOutputPath.Dispose();
+                if (lblOutputPathTxt != null) lblOutputPathTxt.Dispose();
+                if (aboutButton != null) aboutButton.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -78,6 +86,9 @@ namespace FolderToPDF
             lblExcludeFolders = new Label();
             lblExcludeFiles = new Label();
             aboutButton = new Button();
+            lblOutputPathTxt = new Label();
+            txtOutputPathTxt = new TextBox();
+            btnGenerateTxt = new Button();
             SuspendLayout();
             // 
             // txtDirectory
@@ -106,14 +117,14 @@ namespace FolderToPDF
             // 
             // txtExcludeFolders
             // 
-            txtExcludeFolders.Location = new Point(120, 102);
+            txtExcludeFolders.Location = new Point(120, 131);
             txtExcludeFolders.Name = "txtExcludeFolders";
             txtExcludeFolders.Size = new Size(350, 27);
             txtExcludeFolders.TabIndex = 1;
             // 
             // txtExcludeFiles
             // 
-            txtExcludeFiles.Location = new Point(120, 132);
+            txtExcludeFiles.Location = new Point(120, 161);
             txtExcludeFiles.Name = "txtExcludeFiles";
             txtExcludeFiles.Size = new Size(350, 27);
             txtExcludeFiles.TabIndex = 3;
@@ -129,9 +140,9 @@ namespace FolderToPDF
             // 
             // btnGenerate
             // 
-            btnGenerate.Location = new Point(172, 165);
+            btnGenerate.Location = new Point(181, 197);
             btnGenerate.Name = "btnGenerate";
-            btnGenerate.Size = new Size(226, 30);
+            btnGenerate.Size = new Size(147, 30);
             btnGenerate.TabIndex = 11;
             btnGenerate.Text = "Generate PDF";
             btnGenerate.Click += BtnGenerate_Click;
@@ -166,7 +177,7 @@ namespace FolderToPDF
             // lblExcludeFolders
             // 
             lblExcludeFolders.AutoSize = true;
-            lblExcludeFolders.Location = new Point(10, 105);
+            lblExcludeFolders.Location = new Point(10, 134);
             lblExcludeFolders.Name = "lblExcludeFolders";
             lblExcludeFolders.Size = new Size(115, 20);
             lblExcludeFolders.TabIndex = 0;
@@ -175,7 +186,7 @@ namespace FolderToPDF
             // lblExcludeFiles
             // 
             lblExcludeFiles.AutoSize = true;
-            lblExcludeFiles.Location = new Point(10, 135);
+            lblExcludeFiles.Location = new Point(10, 164);
             lblExcludeFiles.Name = "lblExcludeFiles";
             lblExcludeFiles.Size = new Size(96, 20);
             lblExcludeFiles.TabIndex = 2;
@@ -183,16 +194,42 @@ namespace FolderToPDF
             // 
             // aboutButton
             // 
-            aboutButton.Location = new Point(10, 165);
+            aboutButton.Location = new Point(18, 197);
             aboutButton.Name = "aboutButton";
             aboutButton.Size = new Size(65, 30);
             aboutButton.TabIndex = 12;
             aboutButton.Text = "About";
             aboutButton.Click += AboutButton_Click;
             // 
+            // lblOutputPathTxt
+            // 
+            lblOutputPathTxt.AutoSize = true;
+            lblOutputPathTxt.Location = new Point(10, 104);
+            lblOutputPathTxt.Name = "lblOutputPathTxt";
+            lblOutputPathTxt.Size = new Size(119, 20);
+            lblOutputPathTxt.TabIndex = 0;
+            lblOutputPathTxt.Text = "Output TXT Path:";
+            lblOutputPathTxt.Click += lblOutputPathTxt_Click;
+            // 
+            // txtOutputPathTxt
+            // 
+            txtOutputPathTxt.Location = new Point(120, 101);
+            txtOutputPathTxt.Name = "txtOutputPathTxt";
+            txtOutputPathTxt.Size = new Size(350, 27);
+            txtOutputPathTxt.TabIndex = 0;
+            // 
+            // btnGenerateTxt
+            // 
+            btnGenerateTxt.Location = new Point(337, 197);
+            btnGenerateTxt.Name = "btnGenerateTxt";
+            btnGenerateTxt.Size = new Size(72, 30);
+            btnGenerateTxt.TabIndex = 0;
+            btnGenerateTxt.Text = "TXT";
+            btnGenerateTxt.Click += BtnGenerateTxt_Click;
+            // 
             // MainForm
             // 
-            ClientSize = new Size(582, 203);
+            ClientSize = new Size(582, 242);
             Controls.Add(lblExcludeFolders);
             Controls.Add(txtExcludeFolders);
             Controls.Add(lblExcludeFiles);
@@ -204,7 +241,10 @@ namespace FolderToPDF
             Controls.Add(txtFileTypes);
             Controls.Add(lblOutputPath);
             Controls.Add(txtOutputPath);
+            Controls.Add(lblOutputPathTxt);
+            Controls.Add(txtOutputPathTxt);
             Controls.Add(btnGenerate);
+            Controls.Add(btnGenerateTxt);
             Controls.Add(aboutButton);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -228,7 +268,6 @@ namespace FolderToPDF
             {
                 if (File.Exists(SETTINGS_FILE))
                 {
-                
                     var settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(SETTINGS_FILE));
                     if (settings != null)
                     {
@@ -236,7 +275,7 @@ namespace FolderToPDF
                         txtFileTypes.Text = settings.FileTypes != null ? string.Join(", ", settings.FileTypes) : string.Empty;
                         txtExcludeFolders.Text = settings.ExcludeFolders != null ? string.Join(", ", settings.ExcludeFolders) : string.Empty;
                         txtExcludeFiles.Text = settings.ExcludeFiles != null ? string.Join(", ", settings.ExcludeFiles) : string.Empty;
-
+                        txtOutputPathTxt.Text = settings.OutputPathTxt;
                         directoryPath = settings.DirectoryPath;
                         fileTypes = settings.FileTypes ?? new List<string> { "py", "css", "html" };
                     }
@@ -258,9 +297,9 @@ namespace FolderToPDF
                     DirectoryPath = txtDirectory.Text,
                     FileTypes = txtFileTypes.Text.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                     ExcludeFolders = txtExcludeFolders.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
-                    ExcludeFiles = txtExcludeFiles.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList()
+                    ExcludeFiles = txtExcludeFiles.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                    OutputPathTxt = txtOutputPathTxt.Text
                 };
-
                 File.WriteAllText(SETTINGS_FILE, JsonConvert.SerializeObject(settings, Formatting.Indented));
             }
             catch (Exception ex)
@@ -289,6 +328,7 @@ namespace FolderToPDF
             {
                 string folderName = new DirectoryInfo(directoryPath).Name;
                 txtOutputPath.Text = $"{folderName}_contents.pdf";
+                txtOutputPathTxt.Text = $"{folderName}_contents.txt";
             }
         }
 
@@ -346,7 +386,48 @@ namespace FolderToPDF
             }
         }
 
+        private void BtnGenerateTxt_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(txtDirectory.Text))
+                {
+                    MessageBox.Show("Please select a directory.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
+                var types = txtFileTypes.Text.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                if (!types.Any())
+                {
+                    MessageBox.Show("Please specify at least one file type.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var excludeFolders = txtExcludeFolders.Text
+                    .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
+                var excludeFiles = txtExcludeFiles.Text
+                    .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
+
+                fileTypes = types.ToList();
+                SaveSettings();
+
+                var contents = GetDirectoryContents(directoryPath, fileTypes, excludeFolders, excludeFiles);
+                if (!contents.Any())
+                {
+                    MessageBox.Show("No matching files found in the directory.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                CreateTxtWithContents(contents, txtOutputPathTxt.Text);
+                MessageBox.Show($"TXT file created: {txtOutputPathTxt.Text}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error generating TXT file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
 
         private List<(string FilePath, string FileName, string Content)> GetDirectoryContents(
@@ -360,14 +441,14 @@ namespace FolderToPDF
             var contents = new List<(string, string, string)>();
             try
             {
-                
+
                 var rootFiles = Directory.GetFiles(dirPath, "*.*", SearchOption.TopDirectoryOnly)
                     .Where(f => types.Any(t => f.EndsWith($".{t}", StringComparison.OrdinalIgnoreCase)))
                     .ToList();
 
                 LogToFile($"Root Files Before Exclusion: {string.Join(", ", rootFiles)}");
 
-               
+
                 if (excludeFiles != null && excludeFiles.Any())
                 {
                     rootFiles = rootFiles.Where(f => !excludeFiles.Any(mask =>
@@ -394,7 +475,7 @@ namespace FolderToPDF
                     }
                 }
 
-               
+
                 var allDirectories = Directory.GetDirectories(dirPath, "*", SearchOption.AllDirectories);
 
                 LogToFile($"All Directories Before Exclusion: {string.Join(", ", allDirectories)}");
@@ -413,7 +494,7 @@ namespace FolderToPDF
 
                     LogToFile($"Files in Directory '{directory}' Before Exclusion: {string.Join(", ", files)}");
 
-                    
+
                     files = files.Where(f => !excludeFiles.Any(mask =>
                     {
                         string fileName = Path.GetFileName(f);
@@ -478,6 +559,26 @@ namespace FolderToPDF
             }
         }
 
+        private void CreateTxtWithContents(List<(string FilePath, string FileName, string Content)> contents, string outputPath)
+        {
+            using (var writer = new StreamWriter(outputPath, false, Encoding.UTF8))
+            {
+                foreach (var (filePath, fileName, content) in contents)
+                {
+                    writer.WriteLine($"File Path: {filePath}");
+                    writer.WriteLine(new string('-', 80)); // Separator line
+                    writer.WriteLine();
+
+                    // Limit content length to prevent memory issues
+                    var truncatedContent = content.Length > 100000 ? content.Substring(0, 100000) + "\n[Content truncated...]" : content;
+                    writer.WriteLine(truncatedContent);
+                    writer.WriteLine();
+                    writer.WriteLine(new string('=', 80)); // File separator
+                    writer.WriteLine();
+                }
+            }
+        }
+
         private void TxtDirectory_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -516,6 +617,11 @@ namespace FolderToPDF
 
         private Label lblExcludeFolders;
         private Label lblExcludeFiles;
+
+        private void lblOutputPathTxt_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class Settings
@@ -524,6 +630,7 @@ namespace FolderToPDF
         public List<string> FileTypes { get; set; }
         public List<string> ExcludeFolders { get; set; }
         public List<string> ExcludeFiles { get; set; }
+        public string OutputPathTxt { get; set; }
     }
 
 

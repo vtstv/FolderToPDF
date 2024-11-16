@@ -26,6 +26,9 @@ namespace FolderToPDF
         private Label lblFileTypes;
         private Label lblOutputPath;
 
+        private CheckBox chkRemoveComments;
+        private CheckBox chkReplaceSensitiveInfo;
+
         private const string SETTINGS_FILE = "settings.json";
         private string directoryPath = string.Empty;
         private List<string> fileTypes = new List<string> { "py", "css", "html" };
@@ -67,6 +70,8 @@ namespace FolderToPDF
                 if (lblOutputPath != null) lblOutputPath.Dispose();
                 if (lblOutputPathTxt != null) lblOutputPathTxt.Dispose();
                 if (aboutButton != null) aboutButton.Dispose();
+                if (chkRemoveComments != null) chkRemoveComments.Dispose();
+                if (chkReplaceSensitiveInfo != null) chkReplaceSensitiveInfo.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -89,6 +94,8 @@ namespace FolderToPDF
             lblOutputPathTxt = new Label();
             txtOutputPathTxt = new TextBox();
             btnGenerateTxt = new Button();
+            chkRemoveComments = new CheckBox();
+            chkReplaceSensitiveInfo = new CheckBox();
             SuspendLayout();
             // 
             // txtDirectory
@@ -227,9 +234,27 @@ namespace FolderToPDF
             btnGenerateTxt.Text = "TXT";
             btnGenerateTxt.Click += BtnGenerateTxt_Click;
             // 
+            // chkRemoveComments
+            // 
+            chkRemoveComments.Location = new Point(120, 240);
+            chkRemoveComments.Name = "chkRemoveComments";
+            chkRemoveComments.Size = new Size(200, 20);
+            chkRemoveComments.TabIndex = 0;
+            chkRemoveComments.Text = "Remove Comments";
+            // 
+            // chkReplaceSensitiveInfo
+            // 
+            chkReplaceSensitiveInfo.Location = new Point(320, 240);
+            chkReplaceSensitiveInfo.Name = "chkReplaceSensitiveInfo";
+            chkReplaceSensitiveInfo.Size = new Size(200, 20);
+            chkReplaceSensitiveInfo.TabIndex = 1;
+            chkReplaceSensitiveInfo.Text = "Replace Sensitive";
+            // 
             // MainForm
             // 
-            ClientSize = new Size(582, 242);
+            ClientSize = new Size(582, 270);
+            Controls.Add(chkRemoveComments);
+            Controls.Add(chkReplaceSensitiveInfo);
             Controls.Add(lblExcludeFolders);
             Controls.Add(txtExcludeFolders);
             Controls.Add(lblExcludeFiles);
@@ -279,6 +304,8 @@ namespace FolderToPDF
                         txtOutputPath.Text = settings.OutputPathPdf;  // Add this line
                         directoryPath = settings.DirectoryPath;
                         fileTypes = settings.FileTypes ?? new List<string> { "py", "css", "html" };
+                        chkRemoveComments.Checked = settings.RemoveComments;
+                        chkReplaceSensitiveInfo.Checked = settings.ReplaceSensitiveInfo;
                     }
                 }
             }
@@ -300,7 +327,9 @@ namespace FolderToPDF
                     ExcludeFolders = txtExcludeFolders.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                     ExcludeFiles = txtExcludeFiles.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                     OutputPathTxt = txtOutputPathTxt.Text,
-                    OutputPathPdf = txtOutputPath.Text  // Add this line
+                    OutputPathPdf = txtOutputPath.Text,
+                    RemoveComments = chkRemoveComments.Checked,
+                    ReplaceSensitiveInfo = chkReplaceSensitiveInfo.Checked
                 };
                 File.WriteAllText(SETTINGS_FILE, JsonConvert.SerializeObject(settings, Formatting.Indented));
             }
@@ -469,6 +498,11 @@ namespace FolderToPDF
                     try
                     {
                         var content = File.ReadAllText(file, Encoding.UTF8);
+                        content = FileCleaner.CleanContent(
+                            content,
+                            chkRemoveComments.Checked,
+                            chkReplaceSensitiveInfo.Checked
+                        );
                         contents.Add((file, Path.GetFileName(file), content));
                     }
                     catch (Exception ex)
@@ -633,7 +667,9 @@ namespace FolderToPDF
         public List<string> ExcludeFolders { get; set; }
         public List<string> ExcludeFiles { get; set; }
         public string OutputPathTxt { get; set; }
-        public string OutputPathPdf { get; set; }  
+        public string OutputPathPdf { get; set; }
+        public bool RemoveComments { get; set; }
+        public bool ReplaceSensitiveInfo { get; set; }
     }
 
 

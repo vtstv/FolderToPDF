@@ -1,19 +1,15 @@
 ﻿//Form1.cs
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.draw;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace FolderToPDF
 {
     public partial class MainForm : Form
     {
+        private Button aboutButton;
         // Control declarations
         private TextBox txtDirectory;
         private TextBox txtFileTypes;
@@ -69,101 +65,152 @@ namespace FolderToPDF
 
         private void InitializeComponent()
         {
-            // Initialize controls
             txtDirectory = new TextBox();
             txtFileTypes = new TextBox();
             txtOutputPath = new TextBox();
             txtExcludeFolders = new TextBox();
-            txtExcludeFiles = new TextBox(); 
-
+            txtExcludeFiles = new TextBox();
             btnBrowse = new Button();
             btnGenerate = new Button();
             lblDirectory = new Label();
             lblFileTypes = new Label();
             lblOutputPath = new Label();
-
-            // Labels and TextBoxes for folders to exclude
-            Label lblExcludeFolders = new Label();
-            lblExcludeFolders.Text = "Exclude Folders:";
-            lblExcludeFolders.Location = new Point(10, 105);
-            lblExcludeFolders.AutoSize = true;
-
+            lblExcludeFolders = new Label();
+            lblExcludeFiles = new Label();
+            aboutButton = new Button();
+            SuspendLayout();
+            // 
+            // txtDirectory
+            // 
+            txtDirectory.AllowDrop = true;
+            txtDirectory.Location = new Point(120, 12);
+            txtDirectory.Name = "txtDirectory";
+            txtDirectory.Size = new Size(350, 27);
+            txtDirectory.TabIndex = 5;
+            txtDirectory.DragDrop += TxtDirectory_DragDrop;
+            txtDirectory.DragEnter += TxtDirectory_DragEnter;
+            // 
+            // txtFileTypes
+            // 
+            txtFileTypes.Location = new Point(120, 42);
+            txtFileTypes.Name = "txtFileTypes";
+            txtFileTypes.Size = new Size(350, 27);
+            txtFileTypes.TabIndex = 8;
+            // 
+            // txtOutputPath
+            // 
+            txtOutputPath.Location = new Point(120, 72);
+            txtOutputPath.Name = "txtOutputPath";
+            txtOutputPath.Size = new Size(350, 27);
+            txtOutputPath.TabIndex = 10;
+            // 
+            // txtExcludeFolders
+            // 
             txtExcludeFolders.Location = new Point(120, 102);
-            txtExcludeFolders.Size = new Size(350, 20);
-
-            // Labels and TextBoxes for files to exclude
-            Label lblExcludeFiles = new Label();
-            lblExcludeFiles.Text = "Exclude Files:";
-            lblExcludeFiles.Location = new Point(10, 135); // Позиция ниже "Exclude Folders"
-            lblExcludeFiles.AutoSize = true;
-
-            txtExcludeFiles = new TextBox();
+            txtExcludeFolders.Name = "txtExcludeFolders";
+            txtExcludeFolders.Size = new Size(350, 27);
+            txtExcludeFolders.TabIndex = 1;
+            // 
+            // txtExcludeFiles
+            // 
             txtExcludeFiles.Location = new Point(120, 132);
-            txtExcludeFiles.Size = new Size(350, 20);
-
-            // Add new controls to form
+            txtExcludeFiles.Name = "txtExcludeFiles";
+            txtExcludeFiles.Size = new Size(350, 27);
+            txtExcludeFiles.TabIndex = 3;
+            // 
+            // btnBrowse
+            // 
+            btnBrowse.Location = new Point(480, 10);
+            btnBrowse.Name = "btnBrowse";
+            btnBrowse.Size = new Size(75, 23);
+            btnBrowse.TabIndex = 6;
+            btnBrowse.Text = "Browse";
+            btnBrowse.Click += BtnBrowse_Click;
+            // 
+            // btnGenerate
+            // 
+            btnGenerate.Location = new Point(172, 165);
+            btnGenerate.Name = "btnGenerate";
+            btnGenerate.Size = new Size(226, 30);
+            btnGenerate.TabIndex = 11;
+            btnGenerate.Text = "Generate PDF";
+            btnGenerate.Click += BtnGenerate_Click;
+            // 
+            // lblDirectory
+            // 
+            lblDirectory.AutoSize = true;
+            lblDirectory.Location = new Point(10, 15);
+            lblDirectory.Name = "lblDirectory";
+            lblDirectory.Size = new Size(117, 20);
+            lblDirectory.TabIndex = 4;
+            lblDirectory.Text = "Select Directory:";
+            // 
+            // lblFileTypes
+            // 
+            lblFileTypes.AutoSize = true;
+            lblFileTypes.Location = new Point(10, 45);
+            lblFileTypes.Name = "lblFileTypes";
+            lblFileTypes.Size = new Size(76, 20);
+            lblFileTypes.TabIndex = 7;
+            lblFileTypes.Text = "File Types:";
+            // 
+            // lblOutputPath
+            // 
+            lblOutputPath.AutoSize = true;
+            lblOutputPath.Location = new Point(10, 75);
+            lblOutputPath.Name = "lblOutputPath";
+            lblOutputPath.Size = new Size(120, 20);
+            lblOutputPath.TabIndex = 9;
+            lblOutputPath.Text = "Output PDF Path:";
+            // 
+            // lblExcludeFolders
+            // 
+            lblExcludeFolders.AutoSize = true;
+            lblExcludeFolders.Location = new Point(10, 105);
+            lblExcludeFolders.Name = "lblExcludeFolders";
+            lblExcludeFolders.Size = new Size(115, 20);
+            lblExcludeFolders.TabIndex = 0;
+            lblExcludeFolders.Text = "Exclude Folders:";
+            // 
+            // lblExcludeFiles
+            // 
+            lblExcludeFiles.AutoSize = true;
+            lblExcludeFiles.Location = new Point(10, 135);
+            lblExcludeFiles.Name = "lblExcludeFiles";
+            lblExcludeFiles.Size = new Size(96, 20);
+            lblExcludeFiles.TabIndex = 2;
+            lblExcludeFiles.Text = "Exclude Files:";
+            // 
+            // aboutButton
+            // 
+            aboutButton.Location = new Point(10, 165);
+            aboutButton.Name = "aboutButton";
+            aboutButton.Size = new Size(65, 30);
+            aboutButton.TabIndex = 12;
+            aboutButton.Text = "About";
+            aboutButton.Click += AboutButton_Click;
+            // 
+            // MainForm
+            // 
+            ClientSize = new Size(582, 203);
             Controls.Add(lblExcludeFolders);
             Controls.Add(txtExcludeFolders);
             Controls.Add(lblExcludeFiles);
             Controls.Add(txtExcludeFiles);
-
-            // Form settings
-            SuspendLayout();
-            Text = "Directory to PDF Converter";
-            Size = new Size(600, 250);
+            Controls.Add(lblDirectory);
+            Controls.Add(txtDirectory);
+            Controls.Add(btnBrowse);
+            Controls.Add(lblFileTypes);
+            Controls.Add(txtFileTypes);
+            Controls.Add(lblOutputPath);
+            Controls.Add(txtOutputPath);
+            Controls.Add(btnGenerate);
+            Controls.Add(aboutButton);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
+            Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-
-            // Directory Label
-            lblDirectory.Text = "Select Directory:";
-            lblDirectory.Location = new Point(10, 15);
-            lblDirectory.AutoSize = true;
-
-            // Directory TextBox
-            txtDirectory.Location = new Point(120, 12);
-            txtDirectory.Size = new Size(350, 20);
-            txtDirectory.AllowDrop = true;
-            txtDirectory.DragDrop += new DragEventHandler(TxtDirectory_DragDrop);
-            txtDirectory.DragEnter += new DragEventHandler(TxtDirectory_DragEnter);
-
-            // Browse Button
-            btnBrowse.Text = "Browse";
-            btnBrowse.Location = new Point(480, 10);
-            btnBrowse.Click += new EventHandler(BtnBrowse_Click);
-
-            // File Types Label
-            lblFileTypes.Text = "File Types:";
-            lblFileTypes.Location = new Point(10, 45);
-            lblFileTypes.AutoSize = true;
-
-            // File Types TextBox
-            txtFileTypes.Location = new Point(120, 42);
-            txtFileTypes.Size = new Size(350, 20);
-
-            // Output Path Label
-            lblOutputPath.Text = "Output PDF Path:";
-            lblOutputPath.Location = new Point(10, 75);
-            lblOutputPath.AutoSize = true;
-
-            // Output Path TextBox
-            txtOutputPath.Location = new Point(120, 72);
-            txtOutputPath.Size = new Size(350, 20);
-
-            // Generate Button
-            btnGenerate.Text = "Generate PDF";
-            btnGenerate.Location = new Point(120, 180); 
-            btnGenerate.Size = new Size(350, 30);
-            btnGenerate.Click += new EventHandler(BtnGenerate_Click);
-
-            // Add controls to form
-            Controls.AddRange(new Control[] {
-        lblDirectory, txtDirectory, btnBrowse,
-        lblFileTypes, txtFileTypes,
-        lblOutputPath, txtOutputPath,
-        btnGenerate
-    });
-
+            Text = "Directory to PDF Converter";
             ResumeLayout(false);
             PerformLayout();
         }
@@ -181,6 +228,7 @@ namespace FolderToPDF
             {
                 if (File.Exists(SETTINGS_FILE))
                 {
+                
                     var settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(SETTINGS_FILE));
                     if (settings != null)
                     {
@@ -244,6 +292,14 @@ namespace FolderToPDF
             }
         }
 
+        private void AboutButton_Click(object sender, EventArgs e)
+        {
+            using (var aboutForm = new AboutForm())
+            {
+                aboutForm.ShowDialog(this);
+            }
+        }
+
         private void BtnGenerate_Click(object sender, EventArgs e)
         {
             try
@@ -304,14 +360,14 @@ namespace FolderToPDF
             var contents = new List<(string, string, string)>();
             try
             {
-                // Получение всех файлов в корневой директории
+                
                 var rootFiles = Directory.GetFiles(dirPath, "*.*", SearchOption.TopDirectoryOnly)
                     .Where(f => types.Any(t => f.EndsWith($".{t}", StringComparison.OrdinalIgnoreCase)))
                     .ToList();
 
                 LogToFile($"Root Files Before Exclusion: {string.Join(", ", rootFiles)}");
 
-                // Исключаем файлы по маске
+               
                 if (excludeFiles != null && excludeFiles.Any())
                 {
                     rootFiles = rootFiles.Where(f => !excludeFiles.Any(mask =>
@@ -338,7 +394,7 @@ namespace FolderToPDF
                     }
                 }
 
-                // Обрабатываем поддиректории
+               
                 var allDirectories = Directory.GetDirectories(dirPath, "*", SearchOption.AllDirectories);
 
                 LogToFile($"All Directories Before Exclusion: {string.Join(", ", allDirectories)}");
@@ -357,7 +413,7 @@ namespace FolderToPDF
 
                     LogToFile($"Files in Directory '{directory}' Before Exclusion: {string.Join(", ", files)}");
 
-                    // Исключаем файлы по маске
+                    
                     files = files.Where(f => !excludeFiles.Any(mask =>
                     {
                         string fileName = Path.GetFileName(f);
@@ -457,6 +513,9 @@ namespace FolderToPDF
                 }
             }
         }
+
+        private Label lblExcludeFolders;
+        private Label lblExcludeFiles;
     }
 
     public class Settings

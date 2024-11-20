@@ -6,17 +6,28 @@ namespace FolderToPDF
 {
     public class FileCleaner
     {
-
         public static string RemoveCommentsAndWhitespace(string content)
         {
             if (string.IsNullOrEmpty(content))
                 return content;
 
-            // Remove single-line comments (//)
-            content = Regex.Replace(content, @"//.*", string.Empty);
+            // Remove single-line comments for C, C++, Java, JavaScript, PHP (//) - ensuring no semicolons are removed
+            content = Regex.Replace(content, @"//[^\r\n]*", string.Empty);
 
-            // Remove multi-line comments (/* */)
+            // Remove single-line comments for Python, Ruby, Shell, INI (#) - avoiding strings with '#'
+            content = Regex.Replace(content, @"(?<!['""])#.*", string.Empty);
+
+            // Remove single-line comments for SQL, INI (;) - only at the start of a line or after a space
+            content = Regex.Replace(content, @"(?<=^|\s);.*", string.Empty);
+
+            // Remove multi-line comments (/* */) for C, C++, Java, JavaScript, PHP, SQL
             content = Regex.Replace(content, @"/\*[\s\S]*?\*/", string.Empty);
+
+            // Remove comments for HTML and XML (<!-- -->)
+            content = Regex.Replace(content, @"<!--[\s\S]*?-->", string.Empty);
+
+            // Remove SQL-style single-line comments (-- [text]) - ensuring it's not inside a string
+            content = Regex.Replace(content, @"--[^\r\n]*", string.Empty);
 
             // Remove extra blank lines and trim leading/trailing spaces
             content = Regex.Replace(content, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline);
@@ -24,7 +35,6 @@ namespace FolderToPDF
 
             return content;
         }
-
 
         public static string ReplaceSensitiveInformation(string content)
         {
@@ -48,7 +58,6 @@ namespace FolderToPDF
 
             return content;
         }
-
 
         public static string CleanContent(string content, bool removeComments, bool replaceSensitiveInfo)
         {

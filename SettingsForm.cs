@@ -1,17 +1,19 @@
-﻿using System;
+﻿using FolderToPDF;
+using System;
 using System.Windows.Forms;
 
-namespace FolderToPDF
+namespace FolderToFOF
 {
     public partial class SettingsForm : Form
     {
         private SettingsManager settingsManager;
 
-        public SettingsForm()
+        public SettingsForm(SettingsManager settingsManager)
         {
             InitializeComponent();
-            settingsManager = new SettingsManager();
+            this.settingsManager = settingsManager;
             LoadSettings();
+            ApplyTheme();
         }
 
         private void LoadSettings()
@@ -22,6 +24,7 @@ namespace FolderToPDF
             txtTitleFontSize.Text = settings.TitleFontSize.ToString();
             txtContentFont.Text = settings.ContentFont;
             txtContentFontSize.Text = settings.ContentFontSize.ToString();
+            txtIncludeFiles.Text = settings.IncludeFiles != null ? string.Join(", ", settings.IncludeFiles) : string.Empty;
         }
 
         private void SaveSettings()
@@ -32,19 +35,29 @@ namespace FolderToPDF
             settings.TitleFontSize = int.Parse(txtTitleFontSize.Text);
             settings.ContentFont = txtContentFont.Text;
             settings.ContentFontSize = int.Parse(txtContentFontSize.Text);
+            settings.IncludeFiles = txtIncludeFiles.Text.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             settingsManager.SaveSettings();
         }
 
-        private void BtnSave_Click(object sender, EventArgs e)
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            base.OnFormClosing(e);
             SaveSettings();
-            MessageBox.Show("Settings saved successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();
         }
 
         private void BtnCheckForUpdates_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Check for updates feature is not implemented yet.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeManager.ApplyTheme(this, settingsManager.Settings.DarkMode);
+        }
+
+        private void SettingsForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

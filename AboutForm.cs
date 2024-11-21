@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 public class AboutForm : Form
 {
-    private Label infoLabel;
+    private Label Infolabel;
     private Button closeButton;
 
     public AboutForm()
@@ -14,38 +14,32 @@ public class AboutForm : Form
 
     private void InitializeComponent()
     {
-        this.infoLabel = new Label();
+        this.Infolabel = new Label();
         this.closeButton = new Button();
         this.SuspendLayout();
-
-        // Configure form
-        this.FormBorderStyle = FormBorderStyle.FixedDialog;
+        this.FormBorderStyle = FormBorderStyle.FixedSingle;
         this.MaximizeBox = false;
         this.MinimizeBox = false;
         this.StartPosition = FormStartPosition.CenterParent;
         this.Text = "About FolderToPDF";
         this.ClientSize = new Size(300, 200);
 
-        // Configure info label
-        this.infoLabel.AutoSize = true;
-        this.infoLabel.Location = new Point(20, 20);
-        this.infoLabel.Text = "FolderToPDF\n\n" +
-                            "Version 0.2.1\n\n" +
-                            "A simple tool to convert folder contents to PDF.\n\n" +
-                            "Developed by Murr \n" +
-                            "© 2024 All rights reserved.";
-        this.infoLabel.TextAlign = ContentAlignment.MiddleCenter;
+        this.Infolabel.AutoSize = true;
+        this.Infolabel.Location = new Point(20, 20);
+        this.Infolabel.Text = "FolderToPDF\n\n" +
+            "Version 0.2.1\n\n" +
+            "A simple tool to convert folder contents to PDF.\n\n" +
+            "Developed by Murr \n" +
+            "@ 2024 All rights reserved.";
+        this.Infolabel.TextAlign = ContentAlignment.MiddleCenter;
 
-        // Configure close button
         this.closeButton.Text = "Close";
-        this.closeButton.Size = new Size(80, 30);
-        this.closeButton.Location = new Point(110, 150);
+        this.closeButton.Size = new Size(60, 30);
+        this.closeButton.Location = new Point(110, 100);
         this.closeButton.Click += new EventHandler(CloseButton_Click);
 
-        // Add controls to form
-        this.Controls.Add(this.infoLabel);
+        this.Controls.Add(this.Infolabel);
         this.Controls.Add(this.closeButton);
-
         this.ResumeLayout(false);
         this.PerformLayout();
     }

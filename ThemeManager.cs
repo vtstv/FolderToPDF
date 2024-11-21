@@ -9,7 +9,7 @@ namespace FolderToPDF
         {
             if (control is Form form)
             {
-                form.BackColor = isDarkMode ? Color.FromArgb(30, 30, 30) : SystemColors.Control;
+                form.BackColor = isDarkMode ? Color.FromArgb(50, 50, 50) : SystemColors.Control;
                 form.ForeColor = isDarkMode ? Color.White : SystemColors.ControlText;
             }
 
@@ -23,7 +23,7 @@ namespace FolderToPDF
         {
             if (control is TextBox textBox)
             {
-                textBox.BackColor = isDarkMode ? Color.FromArgb(40, 40, 40) : SystemColors.Window;
+                textBox.BackColor = isDarkMode ? Color.FromArgb(45, 45, 45) : SystemColors.Window;
                 textBox.ForeColor = isDarkMode ? Color.White : SystemColors.WindowText;
             }
             else if (control is Button button)

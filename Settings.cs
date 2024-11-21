@@ -4,25 +4,21 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-
 namespace FolderToPDF
 {
     public class SettingsManager
     {
         private const string SETTINGS_FILE = "settings.json";
         private Settings _settings;
-
         public SettingsManager()
         {
             LoadSettings();
         }
-
         public Settings Settings
         {
             get { return _settings; }
             set { _settings = value; }
         }
-
         public void LoadSettings()
         {
             try
@@ -45,7 +41,6 @@ namespace FolderToPDF
                 MessageBox.Show($"Error loading settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
         public void SaveSettings()
         {
             try
@@ -57,7 +52,6 @@ namespace FolderToPDF
                 MessageBox.Show($"Error saving settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
         private bool IsDarkModeEnabled()
         {
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
@@ -71,16 +65,16 @@ namespace FolderToPDF
                     }
                 }
             }
-            return true; // Default to dark mode if registry check fails
+            return true;
         }
     }
-
     public class Settings
     {
         public string DirectoryPath { get; set; }
         public List<string> FileTypes { get; set; }
         public List<string> ExcludeFolders { get; set; }
         public List<string> ExcludeFiles { get; set; }
+        public List<string> IncludeFiles { get; set; }
         public string OutputPathTxt { get; set; }
         public string OutputPathPdf { get; set; }
         public bool RemoveComments { get; set; }

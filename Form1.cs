@@ -1,5 +1,4 @@
-﻿using FolderToPDF;
-using iTextSharp.text;
+﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.draw;
 using Newtonsoft.Json;
@@ -12,16 +11,19 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FolderToFOF
+namespace FolderToPDF
 {
     public partial class MainForm : Form
     {
         private SettingsManager settingsManager;
+        private ProfileManager profileManager;
+        private string outputDirectory;
 
         public MainForm()
         {
             InitializeComponent();
             settingsManager = new SettingsManager();
+            profileManager = new ProfileManager();
             SetupForm();
             ApplySettings();
             ApplyTheme();
@@ -53,17 +55,17 @@ namespace FolderToFOF
                 if (lblDirectory != null) lblDirectory.Dispose();
                 if (lblFileTypes != null) lblFileTypes.Dispose();
                 if (lblOutputPath != null) lblOutputPath.Dispose();
-                if (lblOutputPathTxt != null) lblOutputPathTxt.Dispose();
                 if (lblExcludeFolders != null) lblExcludeFolders.Dispose();
                 if (lblExcludeFiles != null) lblExcludeFiles.Dispose();
-                if (lblIncludeFiles != null) lblIncludeFiles.Dispose();
                 if (aboutButton != null) aboutButton.Dispose();
                 if (chkRemoveComments != null) chkRemoveComments.Dispose();
                 if (chkReplaceSensitiveInfo != null) chkReplaceSensitiveInfo.Dispose();
                 if (btnDarkMode != null) btnDarkMode.Dispose();
                 if (btnSettings != null) btnSettings.Dispose();
                 if (txtIncludeFiles != null) txtIncludeFiles.Dispose();
+                if (lblIncludeFiles != null) lblIncludeFiles.Dispose();
                 if (btnShowFolder != null) btnShowFolder.Dispose();
+                if (btnProfiles != null) btnProfiles.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -85,14 +87,14 @@ namespace FolderToFOF
         {
             var settings = settingsManager.Settings;
             txtDirectory.Text = settings.DirectoryPath;
-            txtFileTypes.Text = settings.FileTypes != null ? string.Join(", ", settings.FileTypes) : string.Empty;
-            txtExcludeFolders.Text = settings.ExcludeFolders != null ? string.Join(", ", settings.ExcludeFolders) : string.Empty;
-            txtExcludeFiles.Text = settings.ExcludeFiles != null ? string.Join(", ", settings.ExcludeFiles) : string.Empty;
+            txtFileTypes.Text = string.Join(", ", settings.FileTypes);
+            txtExcludeFolders.Text = string.Join(", ", settings.ExcludeFolders);
+            txtExcludeFiles.Text = string.Join(", ", settings.ExcludeFiles);
             txtOutputPathTxt.Text = settings.OutputPathTxt;
             txtOutputPath.Text = settings.OutputPathPdf;
             chkRemoveComments.Checked = settings.RemoveComments;
             chkReplaceSensitiveInfo.Checked = settings.ReplaceSensitiveInfo;
-            txtIncludeFiles.Text = settings.IncludeFiles != null ? string.Join(", ", settings.IncludeFiles) : string.Empty;
+            txtIncludeFiles.Text = string.Join(", ", settings.IncludeFiles);
         }
 
         private void SaveSettings()
@@ -165,8 +167,20 @@ namespace FolderToFOF
                     return;
                 }
 
-                CreatePDFWithContents(contents, txtOutputPath.Text);
-                MessageBox.Show($"PDF created: {txtOutputPath.Text}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string outputPath = txtOutputPath.Text;
+                if (string.IsNullOrEmpty(Path.GetDirectoryName(outputPath)))
+                {
+                    outputPath = Path.Combine("output", Path.GetFileName(outputPath));
+                }
+
+                outputDirectory = Path.GetDirectoryName(outputPath);
+                if (!Directory.Exists(outputDirectory))
+                {
+                    Directory.CreateDirectory(outputDirectory);
+                }
+
+                CreatePDFWithContents(contents, outputPath);
+                MessageBox.Show($"PDF created: {outputPath}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnShowFolder.Visible = true;
             }
             catch (Exception ex)
@@ -207,8 +221,20 @@ namespace FolderToFOF
                     return;
                 }
 
-                CreateTxtWithContents(contents, txtOutputPathTxt.Text);
-                MessageBox.Show($"TEXT file created: {txtOutputPathTxt.Text}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string outputPath = txtOutputPathTxt.Text;
+                if (string.IsNullOrEmpty(Path.GetDirectoryName(outputPath)))
+                {
+                    outputPath = Path.Combine("output", Path.GetFileName(outputPath));
+                }
+
+                outputDirectory = Path.GetDirectoryName(outputPath);
+                if (!Directory.Exists(outputDirectory))
+                {
+                    Directory.CreateDirectory(outputDirectory);
+                }
+
+                CreateTxtWithContents(contents, outputPath);
+                MessageBox.Show($"TXT file created: {outputPath}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnShowFolder.Visible = true;
             }
             catch (Exception ex)
@@ -217,7 +243,12 @@ namespace FolderToFOF
             }
         }
 
-        private List<(string FilePath, string FileName, string Content)> GetDirectoryContents(string dirPath, List<string> types, List<string> excludeFolders = null, List<string> excludeFiles = null, List<string> includeFiles = null)
+        private List<(string FilePath, string FileName, string Content)> GetDirectoryContents(
+            string dirPath,
+            List<string> types,
+            List<string> excludeFolders = null,
+            List<string> excludeFiles = null,
+            List<string> includeFiles = null)
         {
             LogToFile($"Starting GetDirectoryContents for path: {dirPath}");
             var contents = new List<(string, string, string)>();
@@ -259,7 +290,11 @@ namespace FolderToFOF
                     try
                     {
                         var content = File.ReadAllText(file, Encoding.UTF8);
-                        content = FileCleaner.CleanContent(content, chkRemoveComments.Checked, chkReplaceSensitiveInfo.Checked);
+                        content = FileCleaner.CleanContent(
+                            content,
+                            chkRemoveComments.Checked,
+                            chkReplaceSensitiveInfo.Checked
+                        );
                         contents.Add((file, Path.GetFileName(file), content));
                     }
                     catch (Exception ex)
@@ -346,8 +381,6 @@ namespace FolderToFOF
                 foreach (var (filePath, fileName, content) in contents)
                 {
                     document.Add(new Paragraph($"File Path: {filePath}", titleFont));
-                    var line = new LineSeparator();
-                    document.Add(line);
                     document.Add(Chunk.NEWLINE);
 
                     var truncatedContent = content.Length > settingsManager.Settings.TruncatedContentLength
@@ -372,22 +405,23 @@ namespace FolderToFOF
                     writer.WriteLine();
 
                     var truncatedContent = content.Length > settingsManager.Settings.TruncatedContentLength
-                        ? content.Substring(0, settingsManager.Settings.TruncatedContentLength) + "\n[Content truncated...]"
+                        ? content.Substring(0, settingsManager.Settings.TruncatedContentLength) + "\n{Content truncated...}"
                         : content;
 
                     writer.WriteLine(truncatedContent);
+                    writer.WriteLine();
                     writer.WriteLine();
                 }
             }
         }
 
-        private void TxtDirectory_DragEnter(object sender, DragEventArgs e)
+        private void txtDirectory_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effect = DragDropEffects.Copy;
         }
 
-        private void TxtDirectory_DragDrop(object sender, DragEventArgs e)
+        private void txtDirectory_DragDrop(object sender, DragEventArgs e)
         {
             HandleDragDrop(e);
         }
@@ -424,6 +458,35 @@ namespace FolderToFOF
             txtOutputPathTxt.Text = $"{folderName}_contents.txt";
         }
 
+        private void BtnShowFolder_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(outputDirectory))
+            {
+                MessageBox.Show("Output directory path is invalid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (!Directory.Exists(outputDirectory))
+            {
+                MessageBox.Show("Output directory does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                Process.Start("explorer.exe", outputDirectory);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error opening output directory: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeManager.ApplyTheme(this, settingsManager.Settings.DarkMode);
+        }
+
         private void BtnSettings_Click(object sender, EventArgs e)
         {
             using (var settingsForm = new SettingsForm(settingsManager))
@@ -431,26 +494,6 @@ namespace FolderToFOF
                 settingsForm.StartPosition = FormStartPosition.CenterParent;
                 settingsForm.ShowDialog(this);
             }
-        }
-
-        private void BtnShowFolder_Click(object sender, EventArgs e)
-        {
-            string outputDirectory = Path.GetDirectoryName(txtOutputPath.Text);
-            if (Directory.Exists(outputDirectory))
-            {
-                Process.Start("explorer.exe", outputDirectory);
-            }
-            else
-            {
-                MessageBox.Show("Output directory does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        private void BtnDarkMode_Click(object sender, EventArgs e)
-        {
-            settingsManager.Settings.DarkMode = !settingsManager.Settings.DarkMode;
-            ApplyTheme();
         }
 
         private void BtnBrowse_Click(object sender, EventArgs e)
@@ -466,25 +509,60 @@ namespace FolderToFOF
             }
         }
 
-        private void ApplyTheme()
+        private void BtnDarkMode_Click(object sender, EventArgs e)
         {
-            ThemeManager.ApplyTheme(this, settingsManager.Settings.DarkMode);
+            settingsManager.Settings.DarkMode = !settingsManager.Settings.DarkMode;
+            ApplyTheme();
+            settingsManager.SaveSettings();
         }
 
         private void txtOutputPath_TextChanged(object sender, EventArgs e)
         {
-
+            outputDirectory = Path.GetDirectoryName(txtOutputPath.Text);
         }
-    }
 
-    static class Program
-    {
-        [STAThread]
-        static void Main()
+        private void txtOutputPathTxt_TextChanged(object sender, EventArgs e)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            outputDirectory = Path.GetDirectoryName(txtOutputPathTxt.Text);
+        }
+
+        private void BtnProfiles_Click(object sender, EventArgs e)
+        {
+            using (var profilesForm = new ProfilesForm(profileManager, this))
+            {
+                profilesForm.StartPosition = FormStartPosition.CenterParent;
+                profilesForm.ShowDialog(this);
+            }
+        }
+
+        public void LoadProfile(Profile profile)
+        {
+            txtDirectory.Text = profile.DirectoryPath;
+            txtFileTypes.Text = string.Join(", ", profile.FileTypes);
+            txtOutputPath.Text = profile.OutputPathPdf;
+            txtOutputPathTxt.Text = profile.OutputPathTxt;
+            txtExcludeFolders.Text = string.Join(", ", profile.ExcludeFolders);
+            txtExcludeFiles.Text = string.Join(", ", profile.ExcludeFiles);
+            txtIncludeFiles.Text = string.Join(", ", profile.IncludeFiles);
+        }
+
+        public Profile GetCurrentProfile()
+        {
+            return new Profile
+            {
+                DirectoryPath = txtDirectory.Text,
+                FileTypes = txtFileTypes.Text.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                OutputPathPdf = txtOutputPath.Text,
+                OutputPathTxt = txtOutputPathTxt.Text,
+                ExcludeFolders = txtExcludeFolders.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                ExcludeFiles = txtExcludeFiles.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                IncludeFiles = txtIncludeFiles.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList()
+            };
+        }
+
+        private void lblOutputPathTxt_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

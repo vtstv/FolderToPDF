@@ -1,4 +1,4 @@
-﻿namespace FolderToFOF
+﻿namespace FolderToPDF
 {
     partial class SettingsForm
     {
@@ -8,7 +8,6 @@
         private TextBox txtTitleFontSize;
         private TextBox txtContentFont;
         private TextBox txtContentFontSize;
-        private Button btnCheckForUpdates;
         private Label lblTruncatedContentLength;
         private Label lblTitleFont;
         private Label lblTitleFontSize;
@@ -16,15 +15,7 @@
         private Label lblContentFontSize;
         private TextBox txtIncludeFiles;
         private Label lblIncludeFiles;
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        private Button Save;
 
         private void InitializeComponent()
         {
@@ -33,7 +24,6 @@
             txtTitleFontSize = new TextBox();
             txtContentFont = new TextBox();
             txtContentFontSize = new TextBox();
-            btnCheckForUpdates = new Button();
             lblTruncatedContentLength = new Label();
             lblTitleFont = new Label();
             lblTitleFontSize = new Label();
@@ -41,6 +31,7 @@
             lblContentFontSize = new Label();
             txtIncludeFiles = new TextBox();
             lblIncludeFiles = new Label();
+            Save = new Button();
             SuspendLayout();
             // 
             // txtTruncatedContentLength
@@ -78,24 +69,14 @@
             txtContentFontSize.Size = new Size(100, 27);
             txtContentFontSize.TabIndex = 4;
             // 
-            // btnCheckForUpdates
-            // 
-            btnCheckForUpdates.Location = new Point(100, 260);
-            btnCheckForUpdates.Name = "btnCheckForUpdates";
-            btnCheckForUpdates.Size = new Size(150, 23);
-            btnCheckForUpdates.TabIndex = 6;
-            btnCheckForUpdates.Text = "Check for Updates";
-            btnCheckForUpdates.UseVisualStyleBackColor = true;
-            btnCheckForUpdates.Click += BtnCheckForUpdates_Click;
-            // 
             // lblTruncatedContentLength
             // 
             lblTruncatedContentLength.AutoSize = true;
             lblTruncatedContentLength.Location = new Point(20, 23);
             lblTruncatedContentLength.Name = "lblTruncatedContentLength";
-            lblTruncatedContentLength.Size = new Size(182, 20);
+            lblTruncatedContentLength.Size = new Size(117, 20);
             lblTruncatedContentLength.TabIndex = 7;
-            lblTruncatedContentLength.Text = "Truncated Content Length:";
+            lblTruncatedContentLength.Text = "Input file length:";
             // 
             // lblTitleFont
             // 
@@ -103,57 +84,69 @@
             lblTitleFont.Location = new Point(20, 53);
             lblTitleFont.Name = "lblTitleFont";
             lblTitleFont.Size = new Size(74, 20);
-            lblTitleFont.TabIndex = 8;
+            lblTitleFont.TabIndex = 9;
             lblTitleFont.Text = "Title Font:";
             // 
             // lblTitleFontSize
             // 
             lblTitleFontSize.AutoSize = true;
-            lblTitleFontSize.Location = new Point(25, 83);
+            lblTitleFontSize.Location = new Point(20, 83);
             lblTitleFontSize.Name = "lblTitleFontSize";
             lblTitleFontSize.Size = new Size(105, 20);
-            lblTitleFontSize.TabIndex = 9;
+            lblTitleFontSize.TabIndex = 10;
             lblTitleFontSize.Text = "Title Font Size:";
             // 
             // lblContentFont
             // 
             lblContentFont.AutoSize = true;
-            lblContentFont.Location = new Point(25, 113);
+            lblContentFont.Location = new Point(20, 113);
             lblContentFont.Name = "lblContentFont";
             lblContentFont.Size = new Size(97, 20);
-            lblContentFont.TabIndex = 10;
+            lblContentFont.TabIndex = 11;
             lblContentFont.Text = "Content Font:";
             // 
             // lblContentFontSize
             // 
             lblContentFontSize.AutoSize = true;
-            lblContentFontSize.Location = new Point(25, 143);
+            lblContentFontSize.Location = new Point(20, 143);
             lblContentFontSize.Name = "lblContentFontSize";
-            lblContentFontSize.Size = new Size(128, 20);
-            lblContentFontSize.TabIndex = 11;
-            lblContentFontSize.Text = "Content Font Size:";
+            lblContentFontSize.Size = new Size(72, 20);
+            lblContentFontSize.TabIndex = 12;
+            lblContentFontSize.Text = "Font Size:";
             // 
             // txtIncludeFiles
             // 
             txtIncludeFiles.Location = new Point(150, 170);
             txtIncludeFiles.Name = "txtIncludeFiles";
-            txtIncludeFiles.Size = new Size(150, 27);
-            txtIncludeFiles.TabIndex = 12;
+            txtIncludeFiles.Size = new Size(100, 27);
+            txtIncludeFiles.TabIndex = 13;
+            txtIncludeFiles.Visible = false;
             // 
             // lblIncludeFiles
             // 
             lblIncludeFiles.AutoSize = true;
-            lblIncludeFiles.Location = new Point(25, 173);
+            lblIncludeFiles.Location = new Point(20, 173);
             lblIncludeFiles.Name = "lblIncludeFiles";
             lblIncludeFiles.Size = new Size(93, 20);
-            lblIncludeFiles.TabIndex = 13;
+            lblIncludeFiles.TabIndex = 14;
             lblIncludeFiles.Text = "Include Files:";
+            lblIncludeFiles.Visible = false;
+            // 
+            // Save
+            // 
+            Save.Location = new Point(92, 196);
+            Save.Name = "Save";
+            Save.Size = new Size(94, 29);
+            Save.TabIndex = 15;
+            Save.Text = "Save";
+            Save.UseVisualStyleBackColor = true;
+            Save.Click += Save_Click;
             // 
             // SettingsForm
             // 
-            AutoScaleMode = AutoScaleMode.None;
-            AutoSize = true;
-            ClientSize = new Size(284, 293);
+            AcceptButton = Save;
+            ClientSize = new Size(284, 265);
+            Controls.Add(Save);
             Controls.Add(lblIncludeFiles);
             Controls.Add(txtIncludeFiles);
             Controls.Add(lblContentFontSize);
@@ -161,19 +154,12 @@
             Controls.Add(lblTitleFontSize);
             Controls.Add(lblTitleFont);
             Controls.Add(lblTruncatedContentLength);
-            Controls.Add(btnCheckForUpdates);
             Controls.Add(txtContentFontSize);
             Controls.Add(txtContentFont);
             Controls.Add(txtTitleFontSize);
             Controls.Add(txtTitleFont);
             Controls.Add(txtTruncatedContentLength);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            MaximizeBox = false;
-            MinimizeBox = false;
             Name = "SettingsForm";
-            ShowIcon = false;
-            ShowInTaskbar = false;
-            StartPosition = FormStartPosition.CenterParent;
             Text = "Settings";
             Load += SettingsForm_Load;
             ResumeLayout(false);

@@ -1,8 +1,7 @@
-﻿using FolderToPDF;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
-namespace FolderToFOF
+namespace FolderToPDF
 {
     public partial class SettingsForm : Form
     {
@@ -57,7 +56,11 @@ namespace FolderToFOF
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
+        }
 
+        private void Save_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

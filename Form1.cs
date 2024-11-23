@@ -87,15 +87,16 @@ namespace FolderToPDF
         {
             var settings = settingsManager.Settings;
             txtDirectory.Text = settings.DirectoryPath;
-            txtFileTypes.Text = string.Join(", ", settings.FileTypes);
-            txtExcludeFolders.Text = string.Join(",", settings.ExcludeFolders);
-            txtExcludeFiles.Text = string.Join(",", settings.ExcludeFiles);
+            txtFileTypes.Text = settings.FileTypes != null ? string.Join(", ", settings.FileTypes) : string.Empty;
+            txtExcludeFolders.Text = settings.ExcludeFolders != null ? string.Join(", ", settings.ExcludeFolders) : string.Empty;
+            txtExcludeFiles.Text = settings.ExcludeFiles != null ? string.Join(", ", settings.ExcludeFiles) : string.Empty;
             txtOutputPathTxt.Text = settings.OutputPathTxt;
             txtOutputPath.Text = settings.OutputPathPdf;
             chkRemoveComments.Checked = settings.RemoveComments;
             chkReplaceSensitiveInfo.Checked = settings.ReplaceSensitiveInfo;
-            txtIncludeFiles.Text = string.Join(",", settings.IncludeFiles);
+            txtIncludeFiles.Text = settings.IncludeFiles != null ? string.Join(", ", settings.IncludeFiles) : string.Empty;
         }
+
 
 
         private void SaveSettings()

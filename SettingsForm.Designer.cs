@@ -159,7 +159,12 @@
             Controls.Add(txtTitleFontSize);
             Controls.Add(txtTitleFont);
             Controls.Add(txtTruncatedContentLength);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "SettingsForm";
+            ShowIcon = false;
+            ShowInTaskbar = false;
             Text = "Settings";
             Load += SettingsForm_Load;
             ResumeLayout(false);

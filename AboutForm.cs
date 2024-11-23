@@ -60,6 +60,7 @@ public class AboutForm : Form
         MaximizeBox = false;
         MinimizeBox = false;
         Name = "AboutForm";
+        ShowInTaskbar = false;
         StartPosition = FormStartPosition.CenterParent;
         Text = "About FolderToPDF";
         ResumeLayout(false);

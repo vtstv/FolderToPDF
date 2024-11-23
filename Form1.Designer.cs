@@ -56,6 +56,7 @@
             lblIncludeFiles = new Label();
             btnShowFolder = new Button();
             btnProfiles = new Button();
+            label2 = new Label();
             SuspendLayout();
             // 
             // txtDirectory
@@ -285,9 +286,19 @@
             btnProfiles.UseVisualStyleBackColor = true;
             btnProfiles.Click += BtnProfiles_Click;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(10, 134);
+            label2.Name = "label2";
+            label2.Size = new Size(90, 20);
+            label2.TabIndex = 18;
+            label2.Text = "Skip folders:";
+            // 
             // MainForm
             // 
             ClientSize = new Size(589, 274);
+            Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(chkReplaceSensitiveInfo);
             Controls.Add(btnProfiles);
@@ -320,5 +331,7 @@
             ResumeLayout(false);
             PerformLayout();
         }
+
+        private Label label2;
     }
 }

@@ -30,6 +30,13 @@ namespace FolderToPDF
                 if (File.Exists(SETTINGS_FILE))
                 {
                     _settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(SETTINGS_FILE));
+                    _settings.DirectoryPath = _settings.DirectoryPath?.Trim();
+                    _settings.OutputPathTxt = _settings.OutputPathTxt?.Trim();
+                    _settings.OutputPathPdf = _settings.OutputPathPdf?.Trim();
+                    _settings.FileTypes = _settings.FileTypes?.Select(type => type.Trim()).ToList();
+                    _settings.ExcludeFolders = _settings.ExcludeFolders?.Select(folder => folder.Trim()).ToList();
+                    _settings.ExcludeFiles = _settings.ExcludeFiles?.Select(file => file.Trim()).ToList();
+                    _settings.IncludeFiles = _settings.IncludeFiles?.Select(file => file.Trim()).ToList();
                 }
                 else
                 {
@@ -45,6 +52,9 @@ namespace FolderToPDF
                 MessageBox.Show($"Error loading settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+
+
 
         public void SaveSettings()
         {

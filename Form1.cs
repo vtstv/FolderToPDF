@@ -87,14 +87,14 @@ namespace FolderToPDF
         {
             var settings = settingsManager.Settings;
             txtDirectory.Text = settings.DirectoryPath;
-            txtFileTypes.Text = settings.FileTypes != null ? string.Join(", ", settings.FileTypes) : string.Empty;
-            txtExcludeFolders.Text = settings.ExcludeFolders != null ? string.Join(", ", settings.ExcludeFolders) : string.Empty;
-            txtExcludeFiles.Text = settings.ExcludeFiles != null ? string.Join(", ", settings.ExcludeFiles) : string.Empty;
+            txtFileTypes.Text = string.Join(", ", settings.FileTypes);
+            txtExcludeFolders.Text = string.Join(",", settings.ExcludeFolders);
+            txtExcludeFiles.Text = string.Join(",", settings.ExcludeFiles); 
             txtOutputPathTxt.Text = settings.OutputPathTxt;
             txtOutputPath.Text = settings.OutputPathPdf;
             chkRemoveComments.Checked = settings.RemoveComments;
             chkReplaceSensitiveInfo.Checked = settings.ReplaceSensitiveInfo;
-            txtIncludeFiles.Text = settings.IncludeFiles != null ? string.Join(", ", settings.IncludeFiles) : string.Empty;
+            txtIncludeFiles.Text = string.Join(",", settings.IncludeFiles); 
         }
 
 
@@ -136,6 +136,7 @@ namespace FolderToPDF
 
             settingsManager.SaveSettings();
         }
+
 
 
 

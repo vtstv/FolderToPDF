@@ -268,7 +268,7 @@
             // 
             btnShowFolder.Location = new Point(334, 232);
             btnShowFolder.Name = "btnShowFolder";
-            btnShowFolder.Size = new Size(147, 30);
+            btnShowFolder.Size = new Size(126, 30);
             btnShowFolder.TabIndex = 16;
             btnShowFolder.Text = "Output Files";
             btnShowFolder.UseVisualStyleBackColor = true;

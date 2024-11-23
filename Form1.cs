@@ -88,27 +88,36 @@ namespace FolderToPDF
             var settings = settingsManager.Settings;
             txtDirectory.Text = settings.DirectoryPath;
             txtFileTypes.Text = string.Join(", ", settings.FileTypes);
-            txtExcludeFolders.Text = string.Join(", ", settings.ExcludeFolders);
-            txtExcludeFiles.Text = string.Join(", ", settings.ExcludeFiles);
+            txtExcludeFolders.Text = string.Join(",", settings.ExcludeFolders);
+            txtExcludeFiles.Text = string.Join(",", settings.ExcludeFiles);
             txtOutputPathTxt.Text = settings.OutputPathTxt;
             txtOutputPath.Text = settings.OutputPathPdf;
             chkRemoveComments.Checked = settings.RemoveComments;
             chkReplaceSensitiveInfo.Checked = settings.ReplaceSensitiveInfo;
-            txtIncludeFiles.Text = string.Join(", ", settings.IncludeFiles);
+            txtIncludeFiles.Text = string.Join(",", settings.IncludeFiles);
         }
+
 
         private void SaveSettings()
         {
             var settings = settingsManager.Settings;
-            settings.DirectoryPath = txtDirectory.Text;
-            settings.FileTypes = txtFileTypes.Text.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            settings.ExcludeFolders = txtExcludeFolders.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            settings.ExcludeFiles = txtExcludeFiles.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            settings.OutputPathTxt = txtOutputPathTxt.Text;
-            settings.OutputPathPdf = txtOutputPath.Text;
+            settings.DirectoryPath = txtDirectory.Text.Trim();
+            settings.FileTypes = txtFileTypes.Text.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                                             .Select(type => type.Trim())
+                                             .ToList();
+            settings.ExcludeFolders = txtExcludeFolders.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                                       .Select(folder => folder.Trim())
+                                                       .ToList();
+            settings.ExcludeFiles = txtExcludeFiles.Text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                                   .Select(file => file.Trim())
+                                                   .ToList();
+            settings.IncludeFiles = txtIncludeFiles.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                                   .Select(file => file.Trim())
+                                                   .ToList();
+            settings.OutputPathTxt = txtOutputPathTxt.Text.Trim();
+            settings.OutputPathPdf = txtOutputPath.Text.Trim();
             settings.RemoveComments = chkRemoveComments.Checked;
             settings.ReplaceSensitiveInfo = chkReplaceSensitiveInfo.Checked;
-            settings.IncludeFiles = txtIncludeFiles.Text.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             if (!settings.FileTypes.Any())
             {
@@ -126,6 +135,8 @@ namespace FolderToPDF
 
             settingsManager.SaveSettings();
         }
+
+
 
         private void AboutButton_Click(object sender, EventArgs e)
         {

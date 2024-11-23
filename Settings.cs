@@ -88,10 +88,10 @@ namespace FolderToPDF
     public class Settings
     {
         public string DirectoryPath { get; set; }
-        public List<string> FileTypes { get; set; }
-        public List<string> ExcludeFolders { get; set; }
-        public List<string> ExcludeFiles { get; set; }
-        public List<string> IncludeFiles { get; set; }
+        public List<string> FileTypes { get; set; } = new List<string>();
+        public List<string> ExcludeFolders { get; set; } = new List<string>();
+        public List<string> ExcludeFiles { get; set; } = new List<string>();
+        public List<string> IncludeFiles { get; set; } = new List<string>();
         public string OutputPathTxt { get; set; }
         public string OutputPathPdf { get; set; }
         public bool RemoveComments { get; set; }
@@ -103,4 +103,5 @@ namespace FolderToPDF
         public string ContentFont { get; set; } = "Courier";
         public int ContentFontSize { get; set; } = 6;
     }
+
 }

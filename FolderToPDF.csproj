@@ -7,6 +7,8 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageProjectUrl>http://pdf.murr.li</PackageProjectUrl>
+    <ApplicationIcon>folder-to-pdf.ico</ApplicationIcon>
+    <Authors>Murr</Authors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,6 +43,10 @@
 
   <ItemGroup>
     <EditorConfigFiles Remove="D:\Dev\FolderToPDF_beta\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="folder-to-pdf.ico" />
   </ItemGroup>
 
   <ItemGroup>

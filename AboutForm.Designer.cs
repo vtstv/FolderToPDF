@@ -22,7 +22,6 @@ namespace FolderToPDF
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             Infolabel = new Label();
             closeButton = new Button();
             btnCheckForUpdates = new Button();
@@ -31,27 +30,29 @@ namespace FolderToPDF
             // 
             // Infolabel
             // 
-            Infolabel.Location = new Point(12, 9);
+            Infolabel.Location = new Point(14, 12);
             Infolabel.Name = "Infolabel";
-            Infolabel.Size = new Size(324, 160);
+            Infolabel.Size = new Size(370, 213);
             Infolabel.TabIndex = 0;
-            Infolabel.Text = "Loading...";  
+            Infolabel.Text = "Loading...";
             Infolabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // closeButton
             // 
-            closeButton.Location = new Point(138, 233);
+            closeButton.Location = new Point(158, 311);
+            closeButton.Margin = new Padding(3, 4, 3, 4);
             closeButton.Name = "closeButton";
-            closeButton.Size = new Size(60, 30);
+            closeButton.Size = new Size(69, 40);
             closeButton.TabIndex = 1;
             closeButton.Text = "Close";
             closeButton.Click += CloseButton_Click;
             // 
             // btnCheckForUpdates
             // 
-            btnCheckForUpdates.Location = new Point(93, 192);
+            btnCheckForUpdates.Location = new Point(106, 256);
+            btnCheckForUpdates.Margin = new Padding(3, 4, 3, 4);
             btnCheckForUpdates.Name = "btnCheckForUpdates";
-            btnCheckForUpdates.Size = new Size(150, 23);
+            btnCheckForUpdates.Size = new Size(171, 31);
             btnCheckForUpdates.TabIndex = 7;
             btnCheckForUpdates.Text = "Check for Updates";
             btnCheckForUpdates.UseVisualStyleBackColor = true;
@@ -59,9 +60,9 @@ namespace FolderToPDF
             // 
             // linkLabel1
             // 
-            linkLabel1.Location = new Point(118, 159);
+            linkLabel1.Location = new Point(135, 212);
             linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(125, 20);
+            linkLabel1.Size = new Size(143, 27);
             linkLabel1.TabIndex = 8;
             linkLabel1.TabStop = true;
             linkLabel1.Text = "https://pdf.murr.li";
@@ -69,17 +70,19 @@ namespace FolderToPDF
             // 
             // AboutForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(347, 283);
+            ClientSize = new Size(397, 377);
             Controls.Add(linkLabel1);
             Controls.Add(btnCheckForUpdates);
             Controls.Add(Infolabel);
             Controls.Add(closeButton);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "AboutForm";
+            ShowIcon = false;
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "About FolderToPDF";

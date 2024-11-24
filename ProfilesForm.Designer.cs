@@ -75,6 +75,7 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "ProfilesForm";
+            ShowIcon = false;
             ShowInTaskbar = false;
             Text = "Profiles";
             ResumeLayout(false);

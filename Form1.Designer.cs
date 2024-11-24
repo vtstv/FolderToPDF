@@ -35,6 +35,7 @@
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             txtDirectory = new TextBox();
             txtFileTypes = new TextBox();
             txtOutputPath = new TextBox();
@@ -350,6 +351,7 @@
             Controls.Add(btnGenerate);
             Controls.Add(aboutButton);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;

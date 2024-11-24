@@ -384,11 +384,11 @@ namespace FolderToPDF
         }
 
         private List<(string FilePath, string FileName, string Content)> GetDirectoryContents(
-            string dirPath,
-            List<string> types,
-            List<string> excludeFolders = null,
-            List<string> excludeFiles = null,
-            List<string> includeFiles = null)
+    string dirPath,
+    List<string> types,
+    List<string> excludeFolders = null,
+    List<string> excludeFiles = null,
+    List<string> includeFiles = null)
         {
             LogToFile($"Starting GetDirectoryContents for path: {dirPath}");
             var contents = new List<(string, string, string)>();
@@ -489,6 +489,11 @@ namespace FolderToPDF
                         try
                         {
                             var content = File.ReadAllText(file, Encoding.UTF8);
+                            content = FileCleaner.CleanContent(
+                                content,
+                                chkRemoveComments.Checked,
+                                chkReplaceSensitiveInfo.Checked
+                            );
                             contents.Add((file, Path.GetFileName(file), content));
                         }
                         catch (Exception ex)
@@ -506,6 +511,7 @@ namespace FolderToPDF
 
             return contents;
         }
+
 
         private void CreatePDFWithContents(List<(string FilePath, string FileName, string Content)> contents, string outputPath)
         {

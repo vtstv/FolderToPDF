@@ -9,6 +9,7 @@
     <PackageProjectUrl>http://pdf.murr.li</PackageProjectUrl>
     <ApplicationIcon>folder-to-pdf.ico</ApplicationIcon>
     <Authors>Murr</Authors>
+    <PackageIcon>folder-to-pdf.ico</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -51,6 +52,13 @@
 
   <ItemGroup>
     <None Include="D:\Dev\FolderToPDF_beta\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="folder-to-pdf.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

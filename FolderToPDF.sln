@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderToPDF", "FolderToPDF.csproj", "{651D4EF3-67DB-4C52-BF17-B27A962281C1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{490E28EF-5E08-4CE6-9255-12B964325D4A}"
+	ProjectSection(SolutionItems) = preProject
+		AboutForm.Designer.cs = AboutForm.Designer.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

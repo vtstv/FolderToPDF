@@ -38,4 +38,12 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Dev\FolderToPDF_beta\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\Dev\FolderToPDF_beta\.editorconfig" />
+  </ItemGroup>
+
 </Project>

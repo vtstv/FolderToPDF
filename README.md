@@ -18,3 +18,5 @@ A simple tool to convert folder contents into a PDF or TXT file.
 
 The utility was created for personal use as a tool to simplify script debugging with the help of models.
 Some features are still WIP. I apologize in advance for any inaccuracies and will do my best to fix them ❤️
+
+![image](https://github.com/user-attachments/assets/43b66715-5074-4802-aab6-5c8226bdc7b8)

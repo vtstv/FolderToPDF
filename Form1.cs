@@ -2,6 +2,7 @@
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.draw;
 using Newtonsoft.Json;
+using SharpToken;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,15 +19,30 @@ namespace FolderToPDF
         private SettingsManager settingsManager;
         private ProfileManager profileManager;
         private string outputDirectory;
+        private TokenAnalysis lastTokenAnalysis;
+        private readonly GptEncoding _encoder;
 
         public MainForm()
         {
             InitializeComponent();
+
+            try
+            {
+                _encoder = GptEncoding.GetEncoding("cl100k_base");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error initializing token encoder: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             settingsManager = new SettingsManager();
             profileManager = new ProfileManager();
             SetupForm();
             ApplySettings();
             ApplyTheme();
+
+            // Initialize token controls
+            InitializeTokenControls();
         }
 
         private void LogToFile(string message)
@@ -40,6 +56,8 @@ namespace FolderToPDF
                 MessageBox.Show($"Error writing to log file: {ex.Message}", "Logging Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+
 
         protected override void Dispose(bool disposing)
         {
@@ -66,6 +84,10 @@ namespace FolderToPDF
                 if (lblIncludeFiles != null) lblIncludeFiles.Dispose();
                 if (btnShowFolder != null) btnShowFolder.Dispose();
                 if (btnProfiles != null) btnProfiles.Dispose();
+                if (lblTotalLines != null) lblTotalLines.Dispose();
+                if (lblTotalTokens != null) lblTotalTokens.Dispose();
+                if (lblMaxTokenLength != null) lblMaxTokenLength.Dispose();
+                if (btnShowTokenDetails != null) btnShowTokenDetails.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -198,8 +220,8 @@ namespace FolderToPDF
 
                 // Calculate and display total lines and tokens
                 var (totalLines, totalTokens) = TokensAndLines.Calculate(contents);
-                lblTotalLines.Text = $"Total Lines: {totalLines}";
-                lblTotalTokens.Text = $"Total Tokens: {totalTokens}";
+                lblTotalLines.Text = $"Lines: {totalLines}";
+                lblTotalTokens.Text = $"Tokens: {totalTokens}";
 
             }
             catch (Exception ex)
@@ -265,6 +287,99 @@ namespace FolderToPDF
             catch (Exception ex)
             {
                 MessageBox.Show($"Error generating TXT file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void UpdateTokenDisplay(int totalLines, int totalTokens, TokenAnalysis analysis)
+        {
+            lblTotalLines.Text = $"Total Lines: {totalLines:N0}";
+            lblTotalTokens.Text = $"Total Tokens: {totalTokens:N0}";
+            lblMaxTokenLength.Text = $"Max Token Length: {analysis.MaxTokenLength:N0} characters";
+
+            // Make the details button visible if there are large tokens
+            btnShowTokenDetails.Visible = analysis.LargeTokens.Any();
+        }
+
+        private void BtnShowTokenDetails_Click(object sender, EventArgs e)
+        {
+            if (lastTokenAnalysis?.LargeTokens == null || !lastTokenAnalysis.LargeTokens.Any())
+            {
+                MessageBox.Show("No token details to display.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var detailsForm = new Form
+            {
+                Text = "Token Analysis Details",
+                Size = new Size(500, 400),
+                StartPosition = FormStartPosition.CenterParent
+            };
+
+            var textBox = new TextBox
+            {
+                Multiline = true,
+                ScrollBars = ScrollBars.Vertical,
+                Dock = DockStyle.Fill,
+                ReadOnly = true
+            };
+
+            var details = new StringBuilder();
+            details.AppendLine("Large Tokens Found (>10 characters):");
+            details.AppendLine();
+
+            foreach (var token in lastTokenAnalysis.LargeTokens)
+            {
+                details.AppendLine($"Length: {token.Length,4} | Token: {token}");
+            }
+
+            textBox.Text = details.ToString();
+            detailsForm.Controls.Add(textBox);
+            detailsForm.ShowDialog();
+        }
+
+        private void InitializeTokenControls()
+        {
+            
+            if (lblTotalLines == null)
+            {
+                lblTotalLines = new Label
+                {
+                    Location = new Point(12, 50),
+                    AutoSize = true
+                };
+                this.Controls.Add(lblTotalLines);
+            }
+
+            if (lblTotalTokens == null)
+            {
+                lblTotalTokens = new Label
+                {
+                    Location = new Point(12, 70),
+                    AutoSize = true
+                };
+                this.Controls.Add(lblTotalTokens);
+            }
+
+            if (lblMaxTokenLength == null)
+            {
+                lblMaxTokenLength = new Label
+                {
+                    Location = new Point(12, 80),
+                    AutoSize = true
+                };
+                this.Controls.Add(lblMaxTokenLength);
+            }
+
+            if (btnShowTokenDetails == null)
+            {
+                btnShowTokenDetails = new Button
+                {
+                    Text = "Show Token Details",
+                    Location = new Point(),
+                    Visible = false
+                };
+                btnShowTokenDetails.Click += BtnShowTokenDetails_Click;
+                this.Controls.Add(btnShowTokenDetails);
             }
         }
 

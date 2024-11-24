@@ -30,6 +30,8 @@
         private Button btnProfiles;
         private Label lblTotalLines;
         private Label lblTotalTokens;
+        private Label lblMaxTokenLength;
+        private Button btnShowTokenDetails;
 
         private void InitializeComponent()
         {
@@ -163,9 +165,9 @@
             lblExcludeFiles.AutoSize = true;
             lblExcludeFiles.Location = new Point(10, 164);
             lblExcludeFiles.Name = "lblExcludeFiles";
-            lblExcludeFiles.Size = new Size(96, 20);
+            lblExcludeFiles.Size = new Size(73, 20);
             lblExcludeFiles.TabIndex = 0;
-            lblExcludeFiles.Text = "Exclude Files:";
+            lblExcludeFiles.Text = "Skip Files:";
             // 
             // aboutButton
             // 
@@ -245,7 +247,7 @@
             // 
             // btnSettings
             // 
-            btnSettings.Location = new Point(481, 234);
+            btnSettings.Location = new Point(481, 259);
             btnSettings.Name = "btnSettings";
             btnSettings.Size = new Size(94, 30);
             btnSettings.TabIndex = 15;
@@ -282,7 +284,7 @@
             // 
             // btnProfiles
             // 
-            btnProfiles.Location = new Point(481, 202);
+            btnProfiles.Location = new Point(481, 227);
             btnProfiles.Name = "btnProfiles";
             btnProfiles.Size = new Size(94, 30);
             btnProfiles.TabIndex = 17;
@@ -295,9 +297,9 @@
             label2.AutoSize = true;
             label2.Location = new Point(10, 134);
             label2.Name = "label2";
-            label2.Size = new Size(90, 20);
+            label2.Size = new Size(92, 20);
             label2.TabIndex = 18;
-            label2.Text = "Skip folders:";
+            label2.Text = "Skip Folders:";
             // 
             // lblTotalLines
             // 
@@ -319,7 +321,7 @@
             // 
             // MainForm
             // 
-            ClientSize = new Size(589, 301);
+            ClientSize = new Size(600, 298);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(lblTotalTokens);

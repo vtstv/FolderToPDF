@@ -195,6 +195,12 @@ namespace FolderToPDF
                 CreatePDFWithContents(contents, outputPath);
                 MessageBox.Show($"PDF created: {outputPath}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnShowFolder.Visible = true;
+
+                // Calculate and display total lines and tokens
+                var (totalLines, totalTokens) = TokensAndLines.Calculate(contents);
+                lblTotalLines.Text = $"Total Lines: {totalLines}";
+                lblTotalTokens.Text = $"Total Tokens: {totalTokens}";
+
             }
             catch (Exception ex)
             {
@@ -249,6 +255,12 @@ namespace FolderToPDF
                 CreateTxtWithContents(contents, outputPath);
                 MessageBox.Show($"TXT file created: {outputPath}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnShowFolder.Visible = true;
+
+                // Calculate and display total lines and tokens
+                var (totalLines, totalTokens) = TokensAndLines.Calculate(contents);
+                lblTotalLines.Text = $"Lines: {totalLines}";
+                lblTotalTokens.Text = $"Tokens: {totalTokens}";
+
             }
             catch (Exception ex)
             {

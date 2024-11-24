@@ -86,7 +86,7 @@ public class AboutForm : Form
 
     private async void btnCheckForUpdates_Click(object sender, EventArgs e)
     {
-        const string UpdateUrl = "https://pdf.murr.li/version.txt"; 
+        const string UpdateUrl = "https://pdf.murr.li/version.txt";
 
         try
         {
@@ -137,7 +137,7 @@ public class AboutForm : Form
         {
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
             {
-                FileName = "https://pdf.murr.li", 
+                FileName = "https://pdf.murr.li",
                 UseShellExecute = true
             });
         }

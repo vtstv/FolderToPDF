@@ -28,6 +28,8 @@
         private Label lblIncludeFiles;
         private Button btnShowFolder;
         private Button btnProfiles;
+        private Label lblTotalLines;
+        private Label lblTotalTokens;
 
         private void InitializeComponent()
         {
@@ -57,6 +59,8 @@
             btnShowFolder = new Button();
             btnProfiles = new Button();
             label2 = new Label();
+            lblTotalLines = new Label();
+            lblTotalTokens = new Label();
             SuspendLayout();
             // 
             // txtDirectory
@@ -110,7 +114,7 @@
             // 
             // btnGenerate
             // 
-            btnGenerate.Location = new Point(119, 232);
+            btnGenerate.Location = new Point(120, 238);
             btnGenerate.Name = "btnGenerate";
             btnGenerate.Size = new Size(133, 30);
             btnGenerate.TabIndex = 11;
@@ -165,7 +169,7 @@
             // 
             // aboutButton
             // 
-            aboutButton.Location = new Point(18, 232);
+            aboutButton.Location = new Point(19, 227);
             aboutButton.Name = "aboutButton";
             aboutButton.Size = new Size(65, 31);
             aboutButton.TabIndex = 12;
@@ -193,7 +197,7 @@
             // 
             // btnGenerateTxt
             // 
-            btnGenerateTxt.Location = new Point(258, 232);
+            btnGenerateTxt.Location = new Point(259, 238);
             btnGenerateTxt.Name = "btnGenerateTxt";
             btnGenerateTxt.Size = new Size(72, 30);
             btnGenerateTxt.TabIndex = 0;
@@ -231,9 +235,9 @@
             // 
             // btnDarkMode
             // 
-            btnDarkMode.Location = new Point(480, 232);
+            btnDarkMode.Location = new Point(18, 259);
             btnDarkMode.Name = "btnDarkMode";
-            btnDarkMode.Size = new Size(94, 30);
+            btnDarkMode.Size = new Size(66, 30);
             btnDarkMode.TabIndex = 14;
             btnDarkMode.Text = "Theme";
             btnDarkMode.UseVisualStyleBackColor = true;
@@ -241,7 +245,7 @@
             // 
             // btnSettings
             // 
-            btnSettings.Location = new Point(480, 202);
+            btnSettings.Location = new Point(481, 234);
             btnSettings.Name = "btnSettings";
             btnSettings.Size = new Size(94, 30);
             btnSettings.TabIndex = 15;
@@ -267,7 +271,7 @@
             // 
             // btnShowFolder
             // 
-            btnShowFolder.Location = new Point(334, 232);
+            btnShowFolder.Location = new Point(335, 238);
             btnShowFolder.Name = "btnShowFolder";
             btnShowFolder.Size = new Size(126, 30);
             btnShowFolder.TabIndex = 16;
@@ -278,7 +282,7 @@
             // 
             // btnProfiles
             // 
-            btnProfiles.Location = new Point(480, 154);
+            btnProfiles.Location = new Point(481, 202);
             btnProfiles.Name = "btnProfiles";
             btnProfiles.Size = new Size(94, 30);
             btnProfiles.TabIndex = 17;
@@ -295,11 +299,31 @@
             label2.TabIndex = 18;
             label2.Text = "Skip folders:";
             // 
+            // lblTotalLines
+            // 
+            lblTotalLines.AutoSize = true;
+            lblTotalLines.Location = new Point(481, 137);
+            lblTotalLines.Name = "lblTotalLines";
+            lblTotalLines.Size = new Size(45, 20);
+            lblTotalLines.TabIndex = 18;
+            lblTotalLines.Text = "Lines:";
+            // 
+            // lblTotalTokens
+            // 
+            lblTotalTokens.AutoSize = true;
+            lblTotalTokens.Location = new Point(481, 158);
+            lblTotalTokens.Name = "lblTotalTokens";
+            lblTotalTokens.Size = new Size(57, 20);
+            lblTotalTokens.TabIndex = 19;
+            lblTotalTokens.Text = "Tokens:";
+            // 
             // MainForm
             // 
-            ClientSize = new Size(589, 274);
+            ClientSize = new Size(589, 301);
             Controls.Add(label2);
             Controls.Add(label1);
+            Controls.Add(lblTotalTokens);
+            Controls.Add(lblTotalLines);
             Controls.Add(chkReplaceSensitiveInfo);
             Controls.Add(btnProfiles);
             Controls.Add(chkRemoveComments);

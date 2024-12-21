@@ -36,8 +36,25 @@ namespace FolderToPDF
 
             var profile = mainForm.GetCurrentProfile();
             profile.Name = profileName;
-            profileManager.AddProfile(profile);
-            LoadProfiles();
+
+            var existingProfile = profileManager.GetProfile(profileName);
+            if (existingProfile != null)
+            {
+                // Ask for confirmation to overwrite
+                var result = MessageBox.Show($"A profile with the name '{profileName}' already exists. Do you want to overwrite it?",
+                                             "Confirm Overwrite", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    profileManager.UpdateProfile(profile);
+                    LoadProfiles();
+                }
+            }
+            else
+            {
+                profileManager.AddProfile(profile);
+                LoadProfiles();
+            }
+
         }
 
         private void BtnLoadProfile_Click(object sender, EventArgs e)

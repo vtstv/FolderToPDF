@@ -2,6 +2,8 @@
 
 This application allows you to convert the contents of a folder (and its subfolders) into a single PDF or TXT file. It supports filtering files by type and folder, and it also includes options to remove comments and redact sensitive information.
 
+<img src="https://github.com/user-attachments/assets/a640136d-6ce1-46e5-bc4c-3b96223cf435" style="width:50%;">
+
 ## Features
 
 *   **Drag & Drop Support**: Easily specify a folder by dragging it into the utility. 
@@ -55,6 +57,3 @@ The application supports wildcards in the **File Types**, **Exclude Files**, and
 
 The utility was created for personal use as a tool to simplify script debugging with the help of models.
 Some features are still WIP. I apologize in advance for any inaccuracies and will do my best to fix them ❤️
-
-
-<img src="https://github.com/user-attachments/assets/0bea26d1-a875-4a50-beb3-1b2864e4a6bb" style="width:50%;">

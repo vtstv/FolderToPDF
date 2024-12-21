@@ -1,4 +1,4 @@
-﻿# Folder to PDF/TXT Converter
+# Folder to PDF/TXT Converter
 
 This application allows you to convert the contents of a folder (and its subfolders) into a single PDF or TXT file. It supports filtering files by type and folder, and it also includes options to remove comments and redact sensitive information.
 

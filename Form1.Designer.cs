@@ -21,7 +21,6 @@
         private Label lblExcludeFiles;
         private CheckBox chkRemoveComments;
         private CheckBox chkReplaceSensitiveInfo;
-        private Label label1;
         private Button btnDarkMode;
         private Button btnSettings;
         private TextBox txtIncludeFiles;
@@ -30,8 +29,8 @@
         private Button btnProfiles;
         private Label lblTotalLines;
         private Label lblTotalTokens;
-        private Label lblMaxTokenLength;
         private Button btnShowTokenDetails;
+        private Button btnClearForm;
 
         private void InitializeComponent()
         {
@@ -54,7 +53,6 @@
             btnGenerateTxt = new Button();
             chkRemoveComments = new CheckBox();
             chkReplaceSensitiveInfo = new CheckBox();
-            label1 = new Label();
             btnDarkMode = new Button();
             btnSettings = new Button();
             txtIncludeFiles = new TextBox();
@@ -64,6 +62,8 @@
             label2 = new Label();
             lblTotalLines = new Label();
             lblTotalTokens = new Label();
+            btnClearForm = new Button();
+            btnShowTokenDetails = new Button();
             SuspendLayout();
             // 
             // txtDirectory
@@ -210,7 +210,7 @@
             // 
             // chkRemoveComments
             // 
-            chkRemoveComments.Location = new Point(480, 79);
+            chkRemoveComments.Location = new Point(484, 104);
             chkRemoveComments.Name = "chkRemoveComments";
             chkRemoveComments.Size = new Size(100, 20);
             chkRemoveComments.TabIndex = 0;
@@ -219,22 +219,12 @@
             // 
             // chkReplaceSensitiveInfo
             // 
-            chkReplaceSensitiveInfo.Location = new Point(480, 102);
+            chkReplaceSensitiveInfo.Location = new Point(484, 127);
             chkReplaceSensitiveInfo.Name = "chkReplaceSensitiveInfo";
             chkReplaceSensitiveInfo.Size = new Size(100, 20);
             chkReplaceSensitiveInfo.TabIndex = 1;
             chkReplaceSensitiveInfo.Text = "Sensitive";
             chkReplaceSensitiveInfo.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Arial", 10F);
-            label1.Location = new Point(497, 55);
-            label1.Name = "label1";
-            label1.Size = new Size(51, 19);
-            label1.TabIndex = 14;
-            label1.Text = "Clean";
             // 
             // btnDarkMode
             // 
@@ -305,7 +295,7 @@
             // lblTotalLines
             // 
             lblTotalLines.AutoSize = true;
-            lblTotalLines.Location = new Point(481, 137);
+            lblTotalLines.Location = new Point(485, 162);
             lblTotalLines.Name = "lblTotalLines";
             lblTotalLines.Size = new Size(45, 20);
             lblTotalLines.TabIndex = 18;
@@ -314,17 +304,38 @@
             // lblTotalTokens
             // 
             lblTotalTokens.AutoSize = true;
-            lblTotalTokens.Location = new Point(481, 158);
+            lblTotalTokens.Location = new Point(485, 183);
             lblTotalTokens.Name = "lblTotalTokens";
             lblTotalTokens.Size = new Size(57, 20);
             lblTotalTokens.TabIndex = 19;
             lblTotalTokens.Text = "Tokens:";
             // 
+            // btnClearForm
+            // 
+            btnClearForm.Location = new Point(481, 50);
+            btnClearForm.Name = "btnClearForm";
+            btnClearForm.Size = new Size(94, 27);
+            btnClearForm.TabIndex = 22;
+            btnClearForm.Text = "Clear Form";
+            btnClearForm.UseVisualStyleBackColor = true;
+            btnClearForm.Click += btnClearForm_Click;
+            // 
+            // btnShowTokenDetails
+            // 
+            btnShowTokenDetails.Location = new Point(335, 268);
+            btnShowTokenDetails.Name = "btnShowTokenDetails";
+            btnShowTokenDetails.Size = new Size(94, 23);
+            btnShowTokenDetails.TabIndex = 21;
+            btnShowTokenDetails.Text = "Token Detail";
+            btnShowTokenDetails.UseVisualStyleBackColor = true;
+            btnShowTokenDetails.Visible = false;
+            // 
             // MainForm
             // 
-            ClientSize = new Size(600, 298);
+            ClientSize = new Size(600, 303);
+            Controls.Add(btnClearForm);
+            Controls.Add(btnShowTokenDetails);
             Controls.Add(label2);
-            Controls.Add(label1);
             Controls.Add(lblTotalTokens);
             Controls.Add(lblTotalLines);
             Controls.Add(chkReplaceSensitiveInfo);

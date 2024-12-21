@@ -42,7 +42,7 @@ namespace FolderToPDF
                 {
                     _settings = new Settings
                     {
-                        FileTypes = new List<string> { "js", "py", "cs" },
+                        FileTypes = new List<string> { "*.js", "*.py", "*.cs" },
                         DarkMode = IsDarkModeEnabled()
                     };
                 }

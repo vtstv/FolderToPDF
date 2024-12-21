@@ -86,8 +86,8 @@ namespace FolderToPDF
                 if (btnProfiles != null) btnProfiles.Dispose();
                 if (lblTotalLines != null) lblTotalLines.Dispose();
                 if (lblTotalTokens != null) lblTotalTokens.Dispose();
-                if (lblMaxTokenLength != null) lblMaxTokenLength.Dispose();
                 if (btnShowTokenDetails != null) btnShowTokenDetails.Dispose();
+                if (btnClearForm != null) btnClearForm.Dispose(); // Dispose the Clear Form button
             }
             base.Dispose(disposing);
         }
@@ -294,7 +294,6 @@ namespace FolderToPDF
         {
             lblTotalLines.Text = $"Total Lines: {totalLines:N0}";
             lblTotalTokens.Text = $"Total Tokens: {totalTokens:N0}";
-            lblMaxTokenLength.Text = $"Max Token Length: {analysis.MaxTokenLength:N0} characters";
 
             // Make the details button visible if there are large tokens
             btnShowTokenDetails.Visible = analysis.LargeTokens.Any();
@@ -360,15 +359,6 @@ namespace FolderToPDF
                 this.Controls.Add(lblTotalTokens);
             }
 
-            if (lblMaxTokenLength == null)
-            {
-                lblMaxTokenLength = new Label
-                {
-                    Location = new Point(12, 80),
-                    AutoSize = true
-                };
-                this.Controls.Add(lblMaxTokenLength);
-            }
 
             if (btnShowTokenDetails == null)
             {
@@ -709,6 +699,22 @@ namespace FolderToPDF
         private void lblOutputPathTxt_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnClearForm_Click(object sender, EventArgs e)
+        {
+            // Clear all textboxes and checkboxes
+            txtDirectory.Clear();
+            txtFileTypes.Clear();
+            txtOutputPath.Clear();
+            txtOutputPathTxt.Clear();
+            txtExcludeFolders.Clear();
+            txtExcludeFiles.Clear();
+            txtIncludeFiles.Clear();
+            chkRemoveComments.Checked = false;
+            chkReplaceSensitiveInfo.Checked = false;
+            lblTotalLines.Text = "Lines:";
+            lblTotalTokens.Text = "Tokens:";
         }
     }
 }

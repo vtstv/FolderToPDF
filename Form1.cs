@@ -87,7 +87,7 @@ namespace FolderToPDF
                 if (lblTotalLines != null) lblTotalLines.Dispose();
                 if (lblTotalTokens != null) lblTotalTokens.Dispose();
                 if (btnShowTokenDetails != null) btnShowTokenDetails.Dispose();
-                if (btnClearForm != null) btnClearForm.Dispose(); // Dispose the Clear Form button
+                if (btnClearForm != null) btnClearForm.Dispose(); 
             }
             base.Dispose(disposing);
         }
@@ -705,7 +705,7 @@ namespace FolderToPDF
         {
             // Clear all textboxes and checkboxes
             txtDirectory.Clear();
-            txtFileTypes.Clear();
+            txtFileTypes.Text = "*.*";
             txtOutputPath.Clear();
             txtOutputPathTxt.Clear();
             txtExcludeFolders.Clear();

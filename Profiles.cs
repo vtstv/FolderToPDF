@@ -21,7 +21,6 @@ namespace FolderToPDF
             get { return _profiles; }
             set { _profiles = value; }
         }
-
         public void LoadProfiles()
         {
             try
@@ -40,7 +39,6 @@ namespace FolderToPDF
                 MessageBox.Show($"Error loading profiles: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
         public void SaveProfiles()
         {
             try
@@ -52,13 +50,11 @@ namespace FolderToPDF
                 MessageBox.Show($"Error saving profiles: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
         public void AddProfile(Profile profile)
         {
             _profiles.Add(profile);
             SaveProfiles();
         }
-
         public void UpdateProfile(Profile profile)
         {
             var existingProfile = _profiles.Find(p => p.Name == profile.Name);
@@ -74,13 +70,11 @@ namespace FolderToPDF
                 SaveProfiles();
             }
         }
-
         public Profile GetProfile(string name)
         {
             return _profiles.Find(p => p.Name == name);
         }
     }
-
     public class Profile
     {
         public string Name { get; set; }

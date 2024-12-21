@@ -111,12 +111,12 @@ namespace FolderToPDF
             txtDirectory.Text = settings.DirectoryPath;
             txtFileTypes.Text = string.Join(", ", settings.FileTypes);
             txtExcludeFolders.Text = string.Join(",", settings.ExcludeFolders);
-            txtExcludeFiles.Text = string.Join(",", settings.ExcludeFiles); 
+            txtExcludeFiles.Text = string.Join(",", settings.ExcludeFiles);
             txtOutputPathTxt.Text = settings.OutputPathTxt;
             txtOutputPath.Text = settings.OutputPathPdf;
             chkRemoveComments.Checked = settings.RemoveComments;
             chkReplaceSensitiveInfo.Checked = settings.ReplaceSensitiveInfo;
-            txtIncludeFiles.Text = string.Join(",", settings.IncludeFiles); 
+            txtIncludeFiles.Text = string.Join(",", settings.IncludeFiles);
         }
 
 
@@ -339,7 +339,7 @@ namespace FolderToPDF
 
         private void InitializeTokenControls()
         {
-            
+
             if (lblTotalLines == null)
             {
                 lblTotalLines = new Label
@@ -383,12 +383,13 @@ namespace FolderToPDF
             }
         }
 
+
         private List<(string FilePath, string FileName, string Content)> GetDirectoryContents(
-    string dirPath,
-    List<string> types,
-    List<string> excludeFolders = null,
-    List<string> excludeFiles = null,
-    List<string> includeFiles = null)
+            string dirPath,
+            List<string> types,
+            List<string> excludeFolders = null,
+            List<string> excludeFiles = null,
+            List<string> includeFiles = null)
         {
             LogToFile($"Starting GetDirectoryContents for path: {dirPath}");
             var contents = new List<(string, string, string)>();
@@ -396,32 +397,22 @@ namespace FolderToPDF
             try
             {
                 var rootFiles = Directory.GetFiles(dirPath, "*.*", SearchOption.TopDirectoryOnly)
-                    .Where(f => types.Any(t => f.EndsWith($".{t}", StringComparison.OrdinalIgnoreCase)))
+                    .Where(f => types.Any(t => MatchesPattern(Path.GetFileName(f), t)))
                     .ToList();
 
                 LogToFile($"Root Files Before Exclusion: {string.Join(", ", rootFiles)}");
 
                 if (excludeFiles != null && excludeFiles.Any())
                 {
-                    rootFiles = rootFiles.Where(f => !excludeFiles.Any(mask =>
-                    {
-                        string fileName = Path.GetFileName(f);
-                        return mask.Contains("*")
-                            ? fileName.StartsWith(mask.TrimEnd('*'))
-                            : fileName.Equals(mask, StringComparison.OrdinalIgnoreCase);
-                    })).ToList();
+                    rootFiles = rootFiles.Where(f => !excludeFiles.Any(mask => MatchesPattern(Path.GetFileName(f), mask))).ToList();
                 }
+
 
                 if (includeFiles != null && includeFiles.Any())
                 {
-                    rootFiles = rootFiles.Where(f => includeFiles.Any(mask =>
-                    {
-                        string fileName = Path.GetFileName(f);
-                        return mask.Contains("*")
-                            ? fileName.StartsWith(mask.TrimEnd('*'))
-                            : fileName.Equals(mask, StringComparison.OrdinalIgnoreCase);
-                    })).ToList();
+                    rootFiles = rootFiles.Where(f => includeFiles.Any(mask => MatchesPattern(Path.GetFileName(f), mask))).ToList();
                 }
+
 
                 LogToFile($"Root Files After Exclusion: {string.Join(", ", rootFiles)}");
 
@@ -455,32 +446,21 @@ namespace FolderToPDF
                 foreach (var directory in filteredDirectories)
                 {
                     var files = Directory.GetFiles(directory, "*.*", SearchOption.TopDirectoryOnly)
-                        .Where(f => types.Any(t => f.EndsWith($".{t}", StringComparison.OrdinalIgnoreCase)))
-                        .ToList();
+                         .Where(f => types.Any(t => MatchesPattern(Path.GetFileName(f), t)))
+                         .ToList();
 
                     LogToFile($"Files in Directory '{directory}' Before Exclusion: {string.Join(", ", files)}");
 
                     if (excludeFiles != null && excludeFiles.Any())
                     {
-                        files = files.Where(f => !excludeFiles.Any(mask =>
-                        {
-                            string fileName = Path.GetFileName(f);
-                            return mask.Contains("*")
-                                ? fileName.StartsWith(mask.TrimEnd('*'))
-                                : fileName.Equals(mask, StringComparison.OrdinalIgnoreCase);
-                        })).ToList();
+                        files = files.Where(f => !excludeFiles.Any(mask => MatchesPattern(Path.GetFileName(f), mask))).ToList();
                     }
 
                     if (includeFiles != null && includeFiles.Any())
                     {
-                        files = files.Where(f => includeFiles.Any(mask =>
-                        {
-                            string fileName = Path.GetFileName(f);
-                            return mask.Contains("*")
-                                ? fileName.StartsWith(mask.TrimEnd('*'))
-                                : fileName.Equals(mask, StringComparison.OrdinalIgnoreCase);
-                        })).ToList();
+                        files = files.Where(f => includeFiles.Any(mask => MatchesPattern(Path.GetFileName(f), mask))).ToList();
                     }
+
 
                     LogToFile($"Files in Directory '{directory}' After Exclusion: {string.Join(", ", files)}");
 
@@ -510,6 +490,26 @@ namespace FolderToPDF
             }
 
             return contents;
+        }
+
+        private bool MatchesPattern(string filename, string pattern)
+        {
+            if (string.IsNullOrEmpty(pattern))
+            {
+                return false;
+            }
+
+            if (pattern.Contains('*') || pattern.Contains('?'))
+            {
+                // Convert the wildcard pattern to a regex pattern
+                var regexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".") + "$";
+                return System.Text.RegularExpressions.Regex.IsMatch(filename, regexPattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            }
+            else
+            {
+                // Direct string match
+                return filename.Equals(pattern, StringComparison.OrdinalIgnoreCase);
+            }
         }
 
 

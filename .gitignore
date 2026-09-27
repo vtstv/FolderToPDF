@@ -10,6 +10,9 @@
 *.userosscache
 *.sln.docstates
 AGENTS.MD
+AGENTS.md
+agents.md
+release_artifacts/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

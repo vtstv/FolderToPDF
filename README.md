@@ -1,100 +1,90 @@
-# 📂 FolderToPDF (v2.0 Modern Edition)
+# FolderToPDF
 
-[![.NET 8.0](https://img.shields.io/badge/.NET-8.0_Windows-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
-[![WPF-UI](https://img.shields.io/badge/UI-WPF--UI_Fluent_Mica-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/lepoco/wpfui)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE.txt)
+[![.NET 8.0](https://img.shields.io/badge/.NET-8.0_Windows-512BD4?style=flat&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![WPF-UI](https://img.shields.io/badge/UI-WPF--UI_Fluent-0078D4?style=flat&logo=windows&logoColor=white)](https://github.com/lepoco/wpfui)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](LICENSE.txt)
 
-
-> **FolderToPDF** is a modern, high-performance developer desktop utility designed to ingest, clean, tokenize, and package entire software repositories into polished, token-optimized **PDF**, **Markdown**, and **TXT** documents. Built specifically for LLM prompt engineering (GPT-4o, Claude 3.5/3.7, Gemini 2.0, DeepSeek, Llama 3), code reviews, and architectural documentation.
-
----
-
-## 📸 Application Preview
-
-![FolderToPDF Fluent UI](assets/app-preview.png)
+FolderToPDF is a desktop utility for Windows designed to scan, sanitize, calculate AI token counts, and package software repositories into token-optimized PDF, Markdown, and TXT archives. It is tailored for large-language-model prompt engineering, code reviews, and architectural documentation.
 
 ---
 
-## 🌟 Key Highlights
+## Preview
 
-### 🧠 Modern AI Tokenizers & Telemetry
-- **State-of-the-Art BPE Encodings**: Exact byte-pair encoding powered by SharpToken (`o200k_base` for OpenAI GPT-4o / o1 / o3 and `cl100k_base` for legacy models).
-- **Calibrated Multi-Model Algorithms**:
-  - **OpenAI GPT-4o / o1 / o3** (`o200k_base`)
-  - **Anthropic Claude 3.5 & 3.7 Sonnet** (code-aware BPE calibration)
-  - **Google Gemini 2.0 & 1.5 Pro / Flash** (256k SentencePiece UTF-8)
-  - **Meta Llama 3 / 3.1 / 3.3** (128k BPE vocabulary)
-  - **DeepSeek-V3 & DeepSeek-R1** (128k dense multilingual code BPE)
-- **Live Context Gauges**: Real-time progress bars calculating context window load for **128k** (GPT-4o/Llama) and **200k** (Claude/o1).
-
-### 🚀 Compact Zero-Scroll Dashboard
-- **Optimized Single-Screen Workflow**: Every primary control — directory selection, active preset, filtering rules, token analytics, and export buttons — is immediately accessible on a single screen without vertical scrolling on 1080p, 1440p, or 4K displays.
-- **Windows 11 Fluent Design**: Native Mica backdrop, smooth theme switching (Dark / Light / System), and drag-and-drop folder ingestion.
-
-### 📖 Embedded PDF & Document Viewer
-- **Native Microsoft Edge WebView2 Engine**: Inspect generated PDF documents directly within the application with continuous scroll, zoom controls, thumbnails, text search, and print features.
-- **Syntax & Monospace Reader**: Built-in reader for Markdown and plain-text code archives with fast navigation, word wrap, and external launch shortcuts.
-- **One-Click In-App Preview**: Instantly preview recent exports directly from the Scanner dashboard or Export History table with zero application switching.
-
-### 🗂️ Export History & Projects Hub
-- **Dedicated History Tab**: Automatically indexes every generated PDF, Markdown, and TXT archive.
-- **Search & Quick Actions**: Instant filtering by project name, format, or directory with one-click actions:
-  - Preview inside the integrated in-app document viewer
-  - Open generated document in system default viewer
-  - Highlight file in Windows File Explorer
-  - Copy absolute path to clipboard
-  - Track total tokens, file count, and export size
-
-### ⚙️ Extended Export & Output Preferences
-- **Custom Output Folder**: Select a dedicated destination directory (e.g. `C:\Exports`) with native folder picker.
-- **Automated Workflow**: Option to automatically open Windows File Explorer or launch the generated document immediately upon export completion.
-- **Token Saver**: Optional consecutive blank line normalization to compress source files.
-
-### 🛡️ Zero-Trust Secret Scrubber & Comment Cleaner
-- **Automated Credential Redaction**: Automatically masks OpenAI, Anthropic, AWS, and GitHub API keys, RSA/SSH private keys, JWT tokens, database passwords, and personal emails before export.
-- **Multi-Language Comment Stripper**: Deterministic comment removal for C#, TypeScript, JavaScript, Python, Go, Rust, Java, C++, SQL, HTML, and YAML while preserving string literals.
+![FolderToPDF Interface](assets/app-preview.png)
 
 ---
 
-## 📄 Multi-Format Output Options
+## Features
 
-| Format | Technology | Use Case |
+### Modern Tokenization & Telemetry
+- Exact byte-pair encoding (BPE) powered by SharpToken (`o200k_base` and `cl100k_base`).
+- Calibrated tokenizer algorithms:
+  - OpenAI GPT-4o, o1, o3 (`o200k_base`)
+  - Anthropic Claude 3.5 & 3.7 Sonnet
+  - Google Gemini 2.0 & 1.5 Pro / Flash
+  - Meta Llama 3, 3.1, 3.3
+  - DeepSeek-V3 & DeepSeek-R1
+- Real-time context load indicators for 128k (GPT-4o, Llama) and 200k (Claude, o1) windows.
+
+### Compact Single-Screen Layout
+- Designed to fit standard displays (1080p, 1440p, 4K) without vertical scrolling.
+- Fluent design system with native dark/light theme support and drag-and-drop folder ingestion.
+
+### Integrated Document & PDF Viewer
+- Built-in Microsoft Edge WebView2 rendering engine for generated PDF files with zoom, search, thumbnail navigation, and print support.
+- Monospace reader for Markdown and plain-text archives.
+- Direct in-app preview from the main scan view and export history table.
+
+### Export History & Project Management
+- Automatic indexing of exported documents with search and filtering by project name, format, or directory.
+- Shortcuts to open files in external default viewers, reveal in Windows Explorer, or copy file paths.
+- Aggregate metrics tracking total processed tokens, file counts, and storage footprint.
+
+### Secret Scrubbing & Comment Cleaning
+- Pattern-based automated scrubbing for sensitive credentials (API keys, RSA/SSH private keys, JWT tokens, database passwords, emails) before export.
+- Non-destructive comment stripper supporting C#, TypeScript, JavaScript, Python, Go, Rust, Java, C++, SQL, HTML, and YAML while preserving string literals.
+
+---
+
+## Output Formats
+
+| Format | Engine | Use Case |
 |---|---|---|
-| **PDF Document** | QuestPDF Fluent API | High-fidelity print/archive with ASCII tree, headers, syntax-styled blocks, and page numbers. |
-| **Markdown Archive** | CommonMark / GFM | GitHub-flavored markdown with language-tagged fenced code blocks, ideal for AI chats. |
-| **Plain Text (TXT)** | Stream-optimized | Compact ASCII-delimited plain-text archive for CLI tools and offline review. |
-| **Copy Prompt** | Native Clipboard | Copies full formatted markdown prompt directly into memory for instant pasting into AI dialogs. |
+| **PDF Document** | QuestPDF Fluent API | Formatted documentation with directory tree map, syntax-styled blocks, and page numbers. |
+| **Markdown Archive** | CommonMark / GFM | GitHub-flavored Markdown with language-tagged fenced code blocks for LLM contexts. |
+| **Plain Text (TXT)** | Stream-based | Compact ASCII-delimited plain-text archive for CLI tools and offline review. |
+| **Copy Prompt** | Native Clipboard | Copies formatted Markdown prompt directly to the clipboard for instant pasting. |
 
 ---
 
-## 🏗️ Architecture & Clean Design
+## Architecture
 
-FolderToPDF is strictly decoupled following **Clean Architecture**, **MVVM**, and **SOLID** principles:
+FolderToPDF follows Clean Architecture and MVVM patterns with strict layer decoupling:
 
 ```
 FolderToPDF/
-├── Core/                              # PURE DOMAIN & APPLICATION LOGIC (Zero UI dependencies)
+├── Core/                              # Domain models, business logic, interfaces, services
 │   ├── Enums/                         # TokenizerModel, OutputFormat, AppThemeMode
-│   ├── Models/                        # Domain entities (AppSettings, ScannedFile, ExportHistoryItem)
-│   ├── Interfaces/                    # Service contracts (ITokenCounterService, IExportHistoryService...)
-│   └── Services/                      # Pure implementations (TokenCounter, ExportHistory, Scanner...)
-├── UI/                                # PRESENTATION LAYER (WPF & WPF-UI)
-│   ├── Converters/                    # XAML binding value converters
-│   ├── ViewModels/                    # CommunityToolkit.Mvvm ViewModels (≤ 300 lines each)
+│   ├── Models/                        # Domain entities and configuration models
+│   ├── Interfaces/                    # Service contracts (ITokenCounterService, etc.)
+│   └── Services/                      # Pure domain service implementations
+├── UI/                                # Presentation layer
+│   ├── Converters/                    # XAML value converters
+│   ├── ViewModels/                    # CommunityToolkit.Mvvm ViewModels
 │   └── Views/                         # Windows 11 Fluent XAML views
-└── tests/FolderToPDF.Tests/           # xUnit test suite (57 automated tests)
+└── tests/FolderToPDF.Tests/           # xUnit automated test suite (57 tests)
 ```
 
-- **Strict File Budget**: No file exceeds 400 lines of code.
-- **Strict Quality Gate**: `0 Warning(s), 0 Error(s)` in compiler output with `<GenerateDocumentationFile>true</GenerateDocumentationFile>`.
+- Each file adheres to a strict size budget under 400 lines of code.
+- Zero compiler warnings with XML documentation generation enabled.
 
 ---
 
-## 🚀 Quick Start & Building
+## Installation & Builds
 
 ### Prerequisites
-- Windows 10/11 (x64)
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- Windows 10 (version 1809+) or Windows 11 (x64)
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (only required if building from source)
 
 ### Run from Source
 ```powershell
@@ -103,21 +93,28 @@ cd FolderToPDF
 dotnet run
 ```
 
-### Run Automated Tests
+### Run Tests
 ```powershell
 dotnet test
 ```
 
-### Publish Single-File Executable
-To generate a single, portable `.exe` without loose dependency DLLs:
+### Build Executable
+
+#### Self-Contained Single-File (No .NET installation required)
+Bundles the .NET runtime and native libraries into a standalone executable:
 ```powershell
-dotnet publish FolderToPDF.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o publish
+dotnet publish FolderToPDF.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -o publish\standalone
 ```
-*(The generated `publish\FolderToPDF.exe` will be ready for distribution.)*
+
+#### Framework-Dependent Single-File (Requires .NET 8 Desktop Runtime)
+Creates a lightweight executable that utilizes the system's installed .NET 8 runtime:
+```powershell
+dotnet publish FolderToPDF.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o publish\framework-dependent
+```
 
 ---
 
-## 📄 License & Copyright
+## License
 
 - **Author**: Murr ([github.com/vtstv](https://github.com/vtstv))
-- **License**: Licensed under the [MIT License](LICENSE.txt).
+- **License**: [MIT License](LICENSE.txt)

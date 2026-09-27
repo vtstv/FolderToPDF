@@ -1,64 +1,37 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<!-- ============================================================================
+     Copyright (c) Murr (https://github.com/vtstv)
+     All rights reserved.
+     ============================================================================ -->
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
-    <PackageProjectUrl>http://pdf.murr.li</PackageProjectUrl>
     <ApplicationIcon>folder-to-pdf.ico</ApplicationIcon>
     <Authors>Murr</Authors>
-    <PackageIcon>folder-to-pdf.ico</PackageIcon>
+    <Copyright>Copyright (c) Murr (https://github.com/vtstv). All rights reserved.</Copyright>
+    <PackageProjectUrl>https://github.com/vtstv/FolderToPDF</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/vtstv/FolderToPDF</RepositoryUrl>
+    <Version>2.0.0</Version>
+    <Description>Modern, high-performance developer utility to package codebases and directories into clean, token-optimized PDF, TXT, and Markdown documents for LLMs and documentation.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DefaultItemExcludes>$(DefaultItemExcludes);tests/**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
-    <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
-      <WrapperTool>tlbimp</WrapperTool>
-      <VersionMinor>4</VersionMinor>
-      <VersionMajor>2</VersionMajor>
-      <Guid>215d64d2-031c-33c7-96e3-61794cd1ee61</Guid>
-    </COMReference>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
+    <PackageReference Include="WPF-UI" Version="4.3.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="QuestPDF" Version="2024.12.3" />
+    <PackageReference Include="SharpToken" Version="2.0.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="iTextSharp" Version="5.5.13.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="SharpToken" Version="2.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EditorConfigFiles Remove="D:\Dev\FolderToPDF_beta\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="folder-to-pdf.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="D:\Dev\FolderToPDF_beta\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="folder-to-pdf.ico">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <Resource Include="folder-to-pdf.ico" />
   </ItemGroup>
 
 </Project>

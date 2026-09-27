@@ -1,0 +1,173 @@
+[
+  {
+    "Id": "builtin-codebase",
+    "Name": "Full Codebase (Standard)",
+    "Description": "General developer profile scanning all common language source files with standard exclusions.",
+    "IsBuiltIn": true,
+    "DirectoryPath": "",
+    "FileTypes": [
+      "*.cs",
+      "*.ts",
+      "*.tsx",
+      "*.js",
+      "*.jsx",
+      "*.py",
+      "*.go",
+      "*.rs",
+      "*.java",
+      "*.cpp",
+      "*.h",
+      "*.sql",
+      "*.json",
+      "*.yaml",
+      "*.md"
+    ],
+    "ExcludeFolders": [
+      "node_modules",
+      "bin",
+      "obj",
+      ".git",
+      ".vs",
+      ".idea",
+      "dist",
+      "build",
+      ".next",
+      "__pycache__",
+      ".venv"
+    ],
+    "ExcludeFiles": [
+      "*.lock",
+      "package-lock.json",
+      "*.min.js",
+      "*.min.css",
+      "*.map",
+      "*.svg",
+      "*.png",
+      "*.jpg",
+      "*.ico"
+    ],
+    "IncludeFiles": [],
+    "RemoveComments": false,
+    "RedactSecrets": true,
+    "IncludeFileTreeHeader": true,
+    "OutputPdfName": "",
+    "OutputTxtName": "",
+    "OutputMarkdownName": ""
+  },
+  {
+    "Id": "builtin-frontend",
+    "Name": "Web \u0026 Frontend (React/Vue/Next)",
+    "Description": "Optimized for modern TypeScript, React, Vue, CSS, and web components.",
+    "IsBuiltIn": true,
+    "DirectoryPath": "",
+    "FileTypes": [
+      "*.ts",
+      "*.tsx",
+      "*.js",
+      "*.jsx",
+      "*.vue",
+      "*.css",
+      "*.scss",
+      "*.html",
+      "*.json"
+    ],
+    "ExcludeFolders": [
+      "node_modules",
+      ".next",
+      ".nuxt",
+      "dist",
+      "build",
+      "coverage",
+      ".git",
+      ".turbo"
+    ],
+    "ExcludeFiles": [
+      "*.lock",
+      "package-lock.json",
+      "pnpm-lock.yaml",
+      "*.map",
+      "*.min.js"
+    ],
+    "IncludeFiles": [],
+    "RemoveComments": false,
+    "RedactSecrets": true,
+    "IncludeFileTreeHeader": true,
+    "OutputPdfName": "",
+    "OutputTxtName": "",
+    "OutputMarkdownName": ""
+  },
+  {
+    "Id": "builtin-python",
+    "Name": "Python \u0026 AI Backend",
+    "Description": "Python services, FastAPI, Django, and machine learning pipelines.",
+    "IsBuiltIn": true,
+    "DirectoryPath": "",
+    "FileTypes": [
+      "*.py",
+      "*.sql",
+      "*.yaml",
+      "*.yml",
+      "*.toml",
+      "*.json",
+      "*.md"
+    ],
+    "ExcludeFolders": [
+      "__pycache__",
+      ".venv",
+      "venv",
+      "env",
+      ".pytest_cache",
+      ".mypy_cache",
+      ".git",
+      ".tox"
+    ],
+    "ExcludeFiles": [
+      "poetry.lock",
+      "Pipfile.lock",
+      "*.pyc"
+    ],
+    "IncludeFiles": [],
+    "RemoveComments": false,
+    "RedactSecrets": true,
+    "IncludeFileTreeHeader": true,
+    "OutputPdfName": "",
+    "OutputTxtName": "",
+    "OutputMarkdownName": ""
+  },
+  {
+    "Id": "builtin-dotnet",
+    "Name": ".NET \u0026 C# Solution",
+    "Description": "Optimized for C# solutions, ASP.NET Core, and WPF/MAUI architectures.",
+    "IsBuiltIn": true,
+    "DirectoryPath": "",
+    "FileTypes": [
+      "*.cs",
+      "*.xaml",
+      "*.json",
+      "*.xml",
+      "*.csproj",
+      "*.props",
+      "*.targets"
+    ],
+    "ExcludeFolders": [
+      "bin",
+      "obj",
+      ".vs",
+      "TestResults",
+      ".git",
+      "packages"
+    ],
+    "ExcludeFiles": [
+      "*.suo",
+      "*.user",
+      "*.cache"
+    ],
+    "IncludeFiles": [],
+    "RemoveComments": false,
+    "RedactSecrets": true,
+    "IncludeFileTreeHeader": true,
+    "OutputPdfName": "",
+    "OutputTxtName": "",
+    "OutputMarkdownName": ""
+  }
+]

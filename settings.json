@@ -1,0 +1,23 @@
+{
+  "LastDirectoryPath": "C:\\Dev\\FolderToPDF",
+  "DefaultOutputDirectory": "output",
+  "AutoOpenOutputFolder": true,
+  "AutoOpenExportedFile": false,
+  "NormalizeEmptyLines": false,
+  "ActiveProfileId": "builtin-codebase",
+  "TitleFont": "Segoe UI",
+  "TitleFontSize": 11,
+  "ContentFont": "Consolas",
+  "ContentFontSize": 8,
+  "PdfIncludeLineNumbers": true,
+  "PdfIncludeTableOfContents": true,
+  "TruncatedContentLength": 250000,
+  "PreferredTokenizer": 0,
+  "ThemeMode": 2,
+  "RedactApiKeys": true,
+  "RedactPasswords": true,
+  "RedactEmails": true,
+  "RedactIps": true,
+  "RedactPrivateKeys": true,
+  "RedactJwtTokens": true
+}

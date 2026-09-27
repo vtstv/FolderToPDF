@@ -1,0 +1,130 @@
+<!-- ============================================================================
+     Copyright (c) Murr (https://github.com/vtstv)
+     All rights reserved.
+     ============================================================================ -->
+<UserControl x:Class="FolderToPDF.UI.Views.ProfilesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="900">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Header Card -->
+            <ui:Card Grid.Row="0" Margin="0,0,0,16" Padding="16">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Left">
+                        <TextBlock Text="Presets &amp; Project Profiles" FontWeight="SemiBold" FontSize="16" />
+                        <TextBlock Text="{Binding StatusMessage}"
+                                   FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,2,0,0" />
+                    </StackPanel>
+
+                    <ui:Button Command="{Binding ResetToDefaultsCommand}"
+                               Appearance="Secondary"
+                               Icon="{ui:SymbolIcon ArrowReset24}"
+                               Content="Restore Built-ins"
+                               HorizontalAlignment="Right" />
+                </DockPanel>
+            </ui:Card>
+
+            <!-- Save Current as New Preset Card -->
+            <ui:Card Grid.Row="1" Margin="0,0,0,16" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Create New Preset from Current Settings" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,10" />
+
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ui:TextBox Grid.Column="0"
+                                    Text="{Binding NewProfileName, UpdateSourceTrigger=PropertyChanged}"
+                                    PlaceholderText="Preset Name (e.g. Rust Microservice)" />
+
+                        <ui:TextBox Grid.Column="2"
+                                    Text="{Binding NewProfileDescription, UpdateSourceTrigger=PropertyChanged}"
+                                    PlaceholderText="Optional description..." />
+
+                        <ui:Button Grid.Column="4"
+                                   Command="{Binding SaveCurrentAsNewProfileCommand}"
+                                   Appearance="Primary"
+                                   Icon="{ui:SymbolIcon Add24}"
+                                   Content="Save Preset" />
+                    </Grid>
+                </StackPanel>
+            </ui:Card>
+
+            <!-- Profiles List -->
+            <ItemsControl Grid.Row="2" ItemsSource="{Binding Profiles}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ui:Card Margin="0,0,0,12" Padding="16">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Title Row -->
+                                <DockPanel Grid.Row="0" Margin="0,0,0,8">
+                                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="15" Margin="0,0,10,0" />
+                                        <Border Visibility="{Binding IsBuiltIn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                Background="{DynamicResource AccentFillColorSecondaryBrush}"
+                                                CornerRadius="4" Padding="6,2">
+                                            <TextBlock Text="Built-in" FontSize="10" Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" FontWeight="SemiBold" />
+                                        </Border>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <ui:Button Command="{Binding DataContext.ApplyProfileCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                   CommandParameter="{Binding}"
+                                                   Appearance="Primary"
+                                                   Icon="{ui:SymbolIcon Checkmark24}"
+                                                   Content="Apply"
+                                                   Margin="0,0,8,0" />
+
+                                        <ui:Button Command="{Binding DataContext.DeleteProfileCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                   CommandParameter="{Binding}"
+                                                   Appearance="Danger"
+                                                   Icon="{ui:SymbolIcon Delete24}"
+                                                   Content="Delete"
+                                                   IsEnabled="{Binding IsBuiltIn, Converter={StaticResource InverseBooleanConverter}}" />
+                                    </StackPanel>
+                                </DockPanel>
+
+                                <!-- Description -->
+                                <TextBlock Grid.Row="1" Text="{Binding Description}"
+                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                           FontSize="12" Margin="0,0,0,10" />
+
+                                <!-- Details Badges -->
+                                <WrapPanel Grid.Row="2">
+                                    <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}" CornerRadius="4" Padding="8,4" Margin="0,0,8,4">
+                                        <TextBlock Text="{Binding FileTypes, StringFormat='{}Types: {0}'}" FontSize="11" />
+                                    </Border>
+                                    <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}" CornerRadius="4" Padding="8,4" Margin="0,0,8,4">
+                                        <TextBlock Text="{Binding ExcludeFolders, StringFormat='{}Exclude: {0}'}" FontSize="11" />
+                                    </Border>
+                                </WrapPanel>
+                            </Grid>
+                        </ui:Card>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
